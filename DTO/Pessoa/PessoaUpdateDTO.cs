@@ -14,8 +14,6 @@ namespace m01_labMedicine.DTO.Pessoa
         [Required]
         public string Nome { get; set; }
         public string Genero { get; set; }
-
-        [Required]
         public DateTime DataNascimento { get; set; }
 
         [AllowNull]

@@ -64,7 +64,7 @@ namespace m01_labMedicine.Controllers
         }
 
         [HttpPut("/api/enfermeiros/{identificador}")]
-        public ActionResult<EnfermeiroResponseDTO> Put([FromRoute] int identificador, EnfermeiroRequestDTO enfermeiroUpdateDTO)
+        public ActionResult<EnfermeiroResponseDTO> Put([FromRoute] int identificador, EnfermeiroUpdateDTO enfermeiroUpdateDTO)
         {
             try
             {

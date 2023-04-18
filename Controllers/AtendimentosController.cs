@@ -15,18 +15,18 @@ namespace m01_labMedicine.Controllers
         //Construtor com parametro (Injetado)   
         public AtendimentosController(AtendimentoMedicoContext atendimentoMedicoContext) => this.atendimentoMedicoContext = atendimentoMedicoContext;
 
-        [HttpPut("/api/atendimentos/{identificador}")]
-        public ActionResult<AtendimentoResponseDTO> Put([FromRoute] int identificador, AtendimentoRequestDTO atendimentoUpdateDTO)
+        [HttpPut("/api/atendimentos")]
+        public ActionResult<AtendimentoResponseDTO> Put([FromBody] AtendimentoRequestDTO atendimentoUpdateDTO)
         {
             try
             {
                 //Verificar se existe o medico no banco de dados
-                var medicoModel = atendimentoMedicoContext.Medico.Where(x => x.Id == identificador).FirstOrDefault();
+                var medicoModel = atendimentoMedicoContext.Medico.Where(x => x.Id == atendimentoUpdateDTO.IdMedico).FirstOrDefault();
                 if (medicoModel == null)
                     return NotFound("Médico não encontrado no sistema para o identificador informado! Revise.");
 
                 //Verificar se existe o paciente no banco de dados
-                var pacienteModel = atendimentoMedicoContext.Paciente.Where(x => x.Id == identificador).FirstOrDefault();
+                var pacienteModel = atendimentoMedicoContext.Paciente.Where(x => x.Id == atendimentoUpdateDTO.IdPaciente).FirstOrDefault();
                 if (pacienteModel == null)
                     return NotFound("Paciente não encontrado no sistema para o identificador informado! Revise.");
 

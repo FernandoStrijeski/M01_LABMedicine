@@ -1,3 +1,4 @@
+using m01_labMedicine.DTO.Pessoa;
 using m01_labMedicine.DTO.Pessoa.Paciente;
 using m01_labMedicine.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -71,7 +72,7 @@ namespace m01_labMedicine.Controllers
         }
 
         [HttpPut("/api/pacientes/{identificador}")]
-        public ActionResult<PacienteResponseDTO> Put([FromRoute] int identificador, PacienteRequestDTO pacienteUpdateDTO)
+        public ActionResult<PacienteResponseDTO> Put([FromRoute] int identificador, PacienteUpdateDTO pacienteUpdateDTO)
         {
             try
             {
@@ -143,18 +144,14 @@ namespace m01_labMedicine.Controllers
 
         //Devolve todos os registros ou pelo status opcional
         [HttpGet("/api/pacientes")]
-        public ActionResult<List<PacienteResponseDTO>> Get(string status = "")
+        public ActionResult<List<PacienteResponseDTO>> Get([FromQuery] PacienteStatusRequestDTO status)
         {
             List<PacienteResponseDTO> lista = new();
             IQueryable<PacienteModel> pacientesInnerJoin;
 
-            if (status != "")
+            if (status.StatusAtendimento != null)
             {
-                List<string> lstStatus = new(new string[] { "AGUARDANDO_ATENDIMENTO", "EM_ATENDIMENTO", "ATENDIDO", "NAO_ATENDIDO" });
-                if (!lstStatus.Contains(status.ToUpper()))
-                    return BadRequest("O status informado não existe.");
-
-                pacientesInnerJoin = atendimentoMedicoContext.Paciente.Where(x => x.StatusAtendimento == status);
+                pacientesInnerJoin = atendimentoMedicoContext.Paciente.Where(x => x.StatusAtendimento == status.StatusAtendimento);
             }
             else
                 pacientesInnerJoin = atendimentoMedicoContext.Paciente;
@@ -186,7 +183,7 @@ namespace m01_labMedicine.Controllers
             }
             else
             {
-                if (status != "")
+                if (status.StatusAtendimento != "")
                     return NotFound("Nenhum paciente encontrado para o status informado.");
                 else
                     return NotFound("Nenhum paciente cadastrado.");

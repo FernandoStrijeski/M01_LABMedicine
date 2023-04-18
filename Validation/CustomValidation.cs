@@ -8,9 +8,13 @@ namespace m01_labMedicine.Validation
         public sealed class checkStatusAtendimento : ValidationAttribute
         {
             public String AllowStatus { get; set; }
+            public bool AllowStatusNull { get; set; }
 
             protected override ValidationResult IsValid(object statusAtendimento, ValidationContext validationContext)
             {
+                if (AllowStatusNull && (statusAtendimento == null || statusAtendimento.ToString() == ""))
+                    return ValidationResult.Success;
+
                 string[] myarr = AllowStatus.ToString().Split(',');
                 if (myarr.Contains(statusAtendimento))
                 {
@@ -112,7 +116,7 @@ namespace m01_labMedicine.Validation
         {
             protected override ValidationResult IsValid(object telefone, ValidationContext validationContext)
             {
-                if (ValidarTelefone(telefone.ToString()))
+                if (telefone == null || ValidarTelefone(telefone.ToString()))
                 {
                     return ValidationResult.Success;
                 }
