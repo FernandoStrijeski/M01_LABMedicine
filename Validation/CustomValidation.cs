@@ -23,6 +23,41 @@ namespace m01_labMedicine.Validation
             }
         }
 
+        public sealed class checkEspecializacaoClinica : ValidationAttribute
+        {
+            public String AllowEspecializacoes { get; set; }
+
+            protected override ValidationResult IsValid(object especializacoes, ValidationContext validationContext)
+            {
+                string[] myarr = AllowEspecializacoes.ToString().Split(',');
+                if (myarr.Contains(especializacoes))
+                {
+                    return ValidationResult.Success;
+                }
+                else
+                {
+                    return new ValidationResult("Por favor, informar uma especialização válida! Ex. [" + AllowEspecializacoes.ToString() + "]");
+                }
+            }
+        }
+        public sealed class checkSituacao : ValidationAttribute
+        {
+            public String AllowSituacoes { get; set; }
+
+            protected override ValidationResult IsValid(object especializacoes, ValidationContext validationContext)
+            {
+                string[] myarr = AllowSituacoes.ToString().Split(',');
+                if (myarr.Contains(especializacoes))
+                {
+                    return ValidationResult.Success;
+                }
+                else
+                {
+                    return new ValidationResult("Por favor, informar uma especialização válida! Ex. [" + AllowSituacoes.ToString() + "]");
+                }
+            }
+        }
+
         public sealed class checkCPF : ValidationAttribute
         {            
             protected override ValidationResult IsValid(object cpf, ValidationContext validationContext)
@@ -69,6 +104,33 @@ namespace m01_labMedicine.Validation
                     return false;
 
                 // CPF válido
+                return true;
+            }
+        }
+
+        public sealed class checkTelefone : ValidationAttribute
+        {
+            protected override ValidationResult IsValid(object telefone, ValidationContext validationContext)
+            {
+                if (ValidarTelefone(telefone.ToString()))
+                {
+                    return ValidationResult.Success;
+                }
+                else
+                {
+                    return new ValidationResult("Por favor, informar um telefone válido, somente números!");
+                }
+            }
+            public static bool ValidarTelefone(string telefone)
+            {
+                // Remove caracteres não numéricos do telefone
+                telefone = Regex.Replace(telefone, @"[^\d]", "");
+
+                // Verifica se o telefone/celular possui 10 ou 11 dígitos (com DDD de 2 dígitos)
+                if (telefone.Length != 10 && telefone.Length != 11)
+                    return false;
+                
+                // Telefone válido
                 return true;
             }
         }

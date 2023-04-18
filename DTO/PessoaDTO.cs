@@ -22,7 +22,7 @@ namespace m01_labMedicine.DTO
         public string CPF { get; set; }
 
         [AllowNull]
-        [StringLength(maximumLength: 11, MinimumLength = 11, ErrorMessage = "O campo telefone precisa conter DDD + Número no total de 11 caracteres.")]
+        [checkTelefone]
         public string Telefone { get; set; }        
     }
 }

@@ -36,19 +36,7 @@ namespace m01_labMedicine.Controllers
             var pacienteModelDb = atendimentoMedicoContext.Paciente.Where(x => x.CPF == pacienteDTO.CPF).FirstOrDefault();
             if(pacienteModelDb != null)
                 return Conflict($"Paciente com o CPF informado já cadastrado [{pacienteModelDb.NomeCompleto}]!");
-
-            //Validações de campos
-            List<string> lstStatus = new(new string[] { "AGUARDANDO_ATENDIMENTO", "EM_ATENDIMENTO", "ATENDIDO", "NAO_ATENDIDO" });
-            if (!lstStatus.Contains(pacienteDTO.StatusAtendimento.ToUpper()))
-                return BadRequest("O status informado não existe. Por favor informar um status dessa lista: \"AGUARDANDO_ATENDIMENTO\", \"EM_ATENDIMENTO\", \"ATENDIDO\", \"NAO_ATENDIDO\"");
             
-            if(!PessoaService.ValidarCPF(pacienteDTO.CPF))
-                return BadRequest("O CPF informado não é válido! Revise.");
-
-            if (pacienteDTO.Telefone.Length != 11)
-                return BadRequest("O campo telefone precisa conter 11 caracteres, sendo o DDD e o número precedido pelo digito 9! Revise.");
-
-
             //Add na lista do DBSet Paciente
             atendimentoMedicoContext.Paciente.Add(pacienteModel);
 
@@ -89,15 +77,7 @@ namespace m01_labMedicine.Controllers
                 pacienteModel.CuidadosEspecificos = pacienteUpdateDTO.CuidadosEspecificos;
                 pacienteModel.Convenio = pacienteUpdateDTO.Convenio;
                 pacienteModel.StatusAtendimento = pacienteUpdateDTO.StatusAtendimento;
-
-                //Validações de campos
-                List<string> lstStatus = new(new string[] { "AGUARDANDO_ATENDIMENTO", "EM_ATENDIMENTO", "ATENDIDO", "NAO_ATENDIDO" });
-                if (!lstStatus.Contains(pacienteUpdateDTO.StatusAtendimento.ToUpper()))
-                    return BadRequest("O status informado não existe. Por favor informar um status dessa lista: \"AGUARDANDO_ATENDIMENTO\", \"EM_ATENDIMENTO\", \"ATENDIDO\", \"NAO_ATENDIDO\"");
-
-                if (pacienteUpdateDTO.Telefone.Length != 11)
-                    return BadRequest("O campo telefone precisa conter 11 caracteres, sendo o DDD e o número precedido pelo digito 9! Revise.");
-
+               
                 //Add na lista do DBSet Paciente
                 atendimentoMedicoContext.Paciente.Attach(pacienteModel);
 
