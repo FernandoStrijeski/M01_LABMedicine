@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>m02s09_exercicio</RootNamespace>
+    <RootNamespace>m01_labMedicine</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

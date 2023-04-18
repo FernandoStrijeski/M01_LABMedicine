@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace m01_labMedicine.Model
 {
     [Table("Medico")]
-    public class MedicoModel : PessoaModel
+    public class MedicoModel : Pessoa
     {        
         [NotNull]
         [MaxLength(250)]

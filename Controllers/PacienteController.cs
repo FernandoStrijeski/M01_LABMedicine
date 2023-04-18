@@ -1,5 +1,6 @@
 using m01_labMedicine.DTO;
 using m01_labMedicine.Model;
+using m01_labMedicine.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace m01_labMedicine.Controllers
@@ -31,11 +32,22 @@ namespace m01_labMedicine.Controllers
             pacienteModel.Convenio = pacienteDTO.Convenio;
             pacienteModel.StatusAtendimento = pacienteDTO.StatusAtendimento;
 
-
             //Verificar se existe o Paciente no banco de dados
             var pacienteModelDb = atendimentoMedicoContext.Paciente.Where(x => x.CPF == pacienteDTO.CPF).FirstOrDefault();
             if(pacienteModelDb != null)
                 return Conflict($"Paciente com o CPF informado já cadastrado [{pacienteModelDb.NomeCompleto}]!");
+
+            //Validações de campos
+            List<string> lstStatus = new(new string[] { "AGUARDANDO_ATENDIMENTO", "EM_ATENDIMENTO", "ATENDIDO", "NAO_ATENDIDO" });
+            if (!lstStatus.Contains(pacienteDTO.StatusAtendimento.ToUpper()))
+                return BadRequest("O status informado não existe. Por favor informar um status dessa lista: \"AGUARDANDO_ATENDIMENTO\", \"EM_ATENDIMENTO\", \"ATENDIDO\", \"NAO_ATENDIDO\"");
+            
+            if(!PessoaService.ValidarCPF(pacienteDTO.CPF))
+                return BadRequest("O CPF informado não é válido! Revise.");
+
+            if (pacienteDTO.Telefone.Length != 11)
+                return BadRequest("O campo telefone precisa conter 11 caracteres, sendo o DDD e o número precedido pelo digito 9! Revise.");
+
 
             //Add na lista do DBSet Paciente
             atendimentoMedicoContext.Paciente.Add(pacienteModel);
@@ -46,11 +58,17 @@ namespace m01_labMedicine.Controllers
             PacienteResponseDTO pacienteResponseDTO = new PacienteResponseDTO();
             pacienteResponseDTO.Codigo = pacienteModel.Id;
             pacienteResponseDTO.Nome = pacienteModel.NomeCompleto;
+            pacienteResponseDTO.Genero = pacienteModel.Genero;
+            pacienteResponseDTO.DataNascimento = pacienteModel.DataNascimento;
+            pacienteResponseDTO.CPF = pacienteModel.CPF;
+            pacienteResponseDTO.Telefone = pacienteModel.Telefone;
+            pacienteResponseDTO.ContatoEmergencia = pacienteModel.ContatoEmergencia;
+            pacienteResponseDTO.Alergias = pacienteModel.Alergias;
+            pacienteResponseDTO.CuidadosEspecificos = pacienteModel.CuidadosEspecificos;
+            pacienteResponseDTO.Convenio = pacienteModel.Convenio;
+            pacienteResponseDTO.StatusAtendimento = pacienteModel.StatusAtendimento;
+            pacienteResponseDTO.atendimentos = pacienteModel.TotalAtendimentos;
 
-
-            //-----------------------------------------------------------------------------------------------------------------------------------------------------
-            //completar os campos que faltam incluindo ID E TOTAL DE ATENDIMENTOS
-            //-----------------------------------------------------------------------------------------------------------------------------------------------------
             return Created("", pacienteResponseDTO);
         }
 
@@ -63,11 +81,22 @@ namespace m01_labMedicine.Controllers
             if (pacienteModel != null)
             {
                 pacienteModel.NomeCompleto = pacienteUpdateDTO.Nome;
+                pacienteModel.Genero = pacienteUpdateDTO.Genero;
                 pacienteModel.DataNascimento = pacienteUpdateDTO.DataNascimento;
+                pacienteModel.Telefone = pacienteUpdateDTO.Telefone;
+                pacienteModel.ContatoEmergencia = pacienteUpdateDTO.ContatoEmergencia;
+                pacienteModel.Alergias = pacienteUpdateDTO.Alergias;
+                pacienteModel.CuidadosEspecificos = pacienteUpdateDTO.CuidadosEspecificos;
+                pacienteModel.Convenio = pacienteUpdateDTO.Convenio;
+                pacienteModel.StatusAtendimento = pacienteUpdateDTO.StatusAtendimento;
 
-                //-----------------------------------------------------------------------------------------------------------------------------------------------------
-                //completar os campos que faltam incluindo ID E TOTAL DE ATENDIMENTOS
-                //-----------------------------------------------------------------------------------------------------------------------------------------------------
+                //Validações de campos
+                List<string> lstStatus = new(new string[] { "AGUARDANDO_ATENDIMENTO", "EM_ATENDIMENTO", "ATENDIDO", "NAO_ATENDIDO" });
+                if (!lstStatus.Contains(pacienteUpdateDTO.StatusAtendimento.ToUpper()))
+                    return BadRequest("O status informado não existe. Por favor informar um status dessa lista: \"AGUARDANDO_ATENDIMENTO\", \"EM_ATENDIMENTO\", \"ATENDIDO\", \"NAO_ATENDIDO\"");
+
+                if (pacienteUpdateDTO.Telefone.Length != 11)
+                    return BadRequest("O campo telefone precisa conter 11 caracteres, sendo o DDD e o número precedido pelo digito 9! Revise.");
 
                 //Add na lista do DBSet Paciente
                 atendimentoMedicoContext.Paciente.Attach(pacienteModel);
@@ -77,9 +106,18 @@ namespace m01_labMedicine.Controllers
 
                 PacienteResponseDTO pacienteResponseDTO = new PacienteResponseDTO();
                 pacienteResponseDTO.Codigo = pacienteModel.Id;
-                //-----------------------------------------------------------------------------------------------------------------------------------------------------
-                //completar os campos que faltam incluindo ID E TOTAL DE ATENDIMENTOS
-                //-----------------------------------------------------------------------------------------------------------------------------------------------------
+                pacienteResponseDTO.Nome = pacienteModel.NomeCompleto;
+                pacienteResponseDTO.Genero = pacienteModel.Genero;
+                pacienteResponseDTO.DataNascimento = pacienteModel.DataNascimento;
+                pacienteResponseDTO.CPF = pacienteModel.CPF;
+                pacienteResponseDTO.Telefone = pacienteModel.Telefone;
+                pacienteResponseDTO.ContatoEmergencia = pacienteModel.ContatoEmergencia;
+                pacienteResponseDTO.Alergias = pacienteModel.Alergias;
+                pacienteResponseDTO.CuidadosEspecificos = pacienteModel.CuidadosEspecificos;
+                pacienteResponseDTO.Convenio = pacienteModel.Convenio;
+                pacienteResponseDTO.StatusAtendimento = pacienteModel.StatusAtendimento;
+                pacienteResponseDTO.atendimentos = pacienteModel.TotalAtendimentos;
+
                 return Ok(pacienteResponseDTO);
             }
             else
@@ -89,17 +127,17 @@ namespace m01_labMedicine.Controllers
         }
 
         [HttpDelete("/api/pacientes/{identificador}")]
-        public ActionResult Delete([FromRoute] int id)
+        public ActionResult Delete([FromRoute] int identificador)
         {
             //Verificar se existe no banco de dados
-            var PacienteModel = atendimentoMedicoContext.Paciente.Find(id);
+            var PacienteModel = atendimentoMedicoContext.Paciente.Find(identificador);
 
             if (PacienteModel != null)
             {
                 atendimentoMedicoContext.Paciente.Remove(PacienteModel);
                 atendimentoMedicoContext.SaveChanges();
 
-                return Ok();
+                return NoContent();
             }
             else
             {
@@ -108,16 +146,21 @@ namespace m01_labMedicine.Controllers
             }
         }
 
-
-        //Devolve todos os registros
-        [HttpGet("/api/pacientes/{identificador?}")]
-        public ActionResult<List<PacienteResponseDTO>> Get(int? identificador = 0)
+        //Devolve todos os registros ou pelo status opcional
+        [HttpGet("/api/pacientes")]
+        public ActionResult<List<PacienteResponseDTO>> Get(string status = "")
         {
-            List<PacienteResponseDTO> lista = new List<PacienteResponseDTO>();
+            List<PacienteResponseDTO> lista = new();
             IQueryable<PacienteModel> pacientesInnerJoin;
 
-            if (identificador > 0)            
-                pacientesInnerJoin = atendimentoMedicoContext.Paciente.Where(x => x.Id == identificador);            
+            if (status != "")
+            {
+                List<string> lstStatus = new(new string[] { "AGUARDANDO_ATENDIMENTO", "EM_ATENDIMENTO", "ATENDIDO", "NAO_ATENDIDO" });
+                if(!lstStatus.Contains(status.ToUpper()))
+                    return BadRequest("O status informado não existe.");
+
+                pacientesInnerJoin = atendimentoMedicoContext.Paciente.Where(x => x.StatusAtendimento == status);            
+            }            
             else           
                 pacientesInnerJoin = atendimentoMedicoContext.Paciente;            
             
@@ -138,6 +181,7 @@ namespace m01_labMedicine.Controllers
                     pacienteGet.CuidadosEspecificos = paciente.CuidadosEspecificos;
                     pacienteGet.Convenio = paciente.Convenio;
                     pacienteGet.StatusAtendimento = paciente.StatusAtendimento;
+                    pacienteGet.atendimentos = paciente.TotalAtendimentos;
 
                     lista.Add(pacienteGet);
                 }
@@ -146,30 +190,38 @@ namespace m01_labMedicine.Controllers
             }
             else
             {
-                return NotFound("Nenhum paciente cadastrado.");
+                if (status != "")
+                    return NotFound("Nenhum paciente encontrado para o status informado.");
+                else
+                    return NotFound("Nenhum paciente cadastrado.");
             }
         }
 
         //Devolve por id
-        [HttpGet("/api/pacientes/{id}")]
-        public ActionResult<PacienteResponseDTO> Get([FromRoute] int id)
-        {            
-            PacienteModel pacientesInnerJoin = atendimentoMedicoContext.Paciente.Where(w => w.Id == id).FirstOrDefault();
-            if (pacientesInnerJoin == null)
+        [HttpGet("/api/pacientes/{identificador}")]
+        public ActionResult<PacienteResponseDTO> GetPorId([FromRoute] int identificador)
+        {
+            PacienteModel pacienteInnerJoin = atendimentoMedicoContext.Paciente.Where(w => w.Id == identificador).FirstOrDefault();
+            if (pacienteInnerJoin == null)
             {
                 return NotFound("Paciente não encontrado para o identificador informado.");
             }
 
-            PacienteResponseDTO pacienteGetDto = new PacienteResponseDTO();
-            pacienteGetDto.Codigo = pacientesInnerJoin.Id;
+            PacienteResponseDTO pacienteResponseDTO = new PacienteResponseDTO();
+            pacienteResponseDTO.Codigo = pacienteInnerJoin.Id;
+            pacienteResponseDTO.Nome = pacienteInnerJoin.NomeCompleto;
+            pacienteResponseDTO.Genero = pacienteInnerJoin.Genero;
+            pacienteResponseDTO.DataNascimento = pacienteInnerJoin.DataNascimento;
+            pacienteResponseDTO.CPF = pacienteInnerJoin.CPF;
+            pacienteResponseDTO.Telefone = pacienteInnerJoin.Telefone;
+            pacienteResponseDTO.ContatoEmergencia = pacienteInnerJoin.ContatoEmergencia;
+            pacienteResponseDTO.Alergias = pacienteInnerJoin.Alergias;
+            pacienteResponseDTO.CuidadosEspecificos = pacienteInnerJoin.CuidadosEspecificos;
+            pacienteResponseDTO.Convenio = pacienteInnerJoin.Convenio;
+            pacienteResponseDTO.StatusAtendimento = pacienteInnerJoin.StatusAtendimento;
+            pacienteResponseDTO.atendimentos = pacienteInnerJoin.TotalAtendimentos;
 
-            //-----------------------------------------------------------------------------------------------------------------------------------------------------
-            //completar os campos que faltam incluindo ID E TOTAL DE ATENDIMENTOS
-            //-----------------------------------------------------------------------------------------------------------------------------------------------------
-
-            return Ok(pacienteGetDto);
+            return Ok(pacienteInnerJoin);
         }
-
-
     }
 }
