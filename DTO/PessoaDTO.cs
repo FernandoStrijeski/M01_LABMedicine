@@ -12,7 +12,10 @@ namespace m01_labMedicine.DTO
     public abstract class PessoaDTO
     {
         [Required]
+        [StringLength(maximumLength: 100)]
         public string Nome { get; set; }
+        
+        [StringLength(maximumLength: 30)]
         public string Genero { get; set; }
         
         [Required]
