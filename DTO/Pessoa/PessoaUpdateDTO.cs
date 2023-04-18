@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static m01_labMedicine.Validation.CustomValidation;
 
-namespace m01_labMedicine.DTO
+namespace m01_labMedicine.DTO.Pessoa
 {
     public abstract class PessoaUpdateDTO
     {

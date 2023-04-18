@@ -1,6 +1,5 @@
-using m01_labMedicine.DTO.Paciente;
+using m01_labMedicine.DTO.Pessoa.Paciente;
 using m01_labMedicine.Model;
-using m01_labMedicine.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace m01_labMedicine.Controllers
@@ -16,7 +15,7 @@ namespace m01_labMedicine.Controllers
 
 
         [HttpPost("/api/pacientes/")]
-        public ActionResult<PacienteResponseDTO> Post([FromBody] PacienteDTO pacienteDTO)
+        public ActionResult<PacienteResponseDTO> Post([FromBody] PacienteRequestDTO pacienteDTO)
         {
             try
             {
@@ -72,7 +71,7 @@ namespace m01_labMedicine.Controllers
         }
 
         [HttpPut("/api/pacientes/{identificador}")]
-        public ActionResult<PacienteResponseDTO> Put([FromRoute] int identificador, PacienteDTO pacienteUpdateDTO)
+        public ActionResult<PacienteResponseDTO> Put([FromRoute] int identificador, PacienteRequestDTO pacienteUpdateDTO)
         {
             try
             {

@@ -3,22 +3,20 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using m01_labMedicine.DTO.Pessoa;
 using static m01_labMedicine.Validation.CustomValidation;
 
-namespace m01_labMedicine.DTO.Paciente
+namespace m01_labMedicine.DTO.Pessoa.Medico
 {
-    public class MedicoUpdateDTO : PessoaUpdateDTO
+    public class EnfermeiroUpdateDTO : PessoaUpdateDTO
     {
         [Required]
         [StringLength(maximumLength: 250)]
         public string InstituicaoEnsino { get; set; }
+
         [Required]
-        public string CRMUF { get; set; }
-        [Required]
-        [checkEspecializacaoClinica(AllowEspecializacoes = "Clínico Geral,Anestesista,Dermatologia,Ginecologia,Neurologia,Pediatria,Psiquiatria,Ortopedia")]
-        public string EspecializacaoClinica { get; set; }
-        [Required]
-        [checkSituacao(AllowSituacoes = "Ativo,Inativo")]
+        [StringLength(maximumLength: 20)]
+        public string CofenUF { get; set; }
         public string SituacaoSistema { get; set; }
         public int TotalAtendimentos { get; set; }
     }

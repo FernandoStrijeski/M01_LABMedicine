@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace m01_labMedicine.DTO.Paciente
+namespace m01_labMedicine.DTO.Pessoa.Paciente
 {
     public class PacienteResponseDTO : PessoaDTO
     {

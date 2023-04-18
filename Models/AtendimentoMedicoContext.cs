@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json;
 
 namespace m01_labMedicine.Model
 {
-   public class AtendimentoMedicoContext : DbContext
+    public class AtendimentoMedicoContext : DbContext
     {
         public AtendimentoMedicoContext(DbContextOptions<AtendimentoMedicoContext> options) : base(options)
         {             

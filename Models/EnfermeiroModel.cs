@@ -9,7 +9,7 @@ namespace m01_labMedicine.Model
     {        
         [NotNull]
         [MaxLength(250)]
-        public string InstituicaoEnsinoFormacaoo { get; set; }
+        public string InstituicaoEnsinoFormacao { get; set; }
 
         [NotNull]
         public string CofenUF { get; set; }

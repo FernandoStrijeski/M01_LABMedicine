@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace m01_labMedicine.DTO.Medico
+namespace m01_labMedicine.DTO.Pessoa.Medico
 {
     public class MedicoResponseDTO : PessoaDTO
     {

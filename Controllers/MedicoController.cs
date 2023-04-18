@@ -1,5 +1,4 @@
-using m01_labMedicine.DTO.Medico;
-using m01_labMedicine.DTO.Paciente;
+using m01_labMedicine.DTO.Pessoa.Medico;
 using m01_labMedicine.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +14,7 @@ namespace m01_labMedicine.Controllers
         public MedicoController(AtendimentoMedicoContext atendimentoMedicoContext) => this.atendimentoMedicoContext = atendimentoMedicoContext;
 
         [HttpPost("/api/medicos/")]
-        public ActionResult<MedicoResponseDTO> Post([FromBody] MedicoDTO medicoDTO)
+        public ActionResult<MedicoResponseDTO> Post([FromBody] MedicoRequestDTO medicoDTO)
         {
             try
             {
@@ -36,7 +35,7 @@ namespace m01_labMedicine.Controllers
                 //Verificar se existe o Medico no banco de dados
                 var MedicoModelDb = atendimentoMedicoContext.Medico.Where(x => x.CPF == medicoDTO.CPF).FirstOrDefault();
                 if (MedicoModelDb != null)
-                    return Conflict($"Medico com o CPF informado já cadastrado [{MedicoModelDb.NomeCompleto}]!");
+                    return Conflict($"Médico com o CPF informado já cadastrado [{MedicoModelDb.NomeCompleto}]!");
 
                 //Add na lista do DBSet Medico
                 atendimentoMedicoContext.Medico.Add(medicoModel);
@@ -69,7 +68,7 @@ namespace m01_labMedicine.Controllers
         }
 
         [HttpPut("/api/medicos/{identificador}")]
-        public ActionResult<MedicoResponseDTO> Put([FromRoute] int identificador, MedicoDTO medicoUpdateDTO)
+        public ActionResult<MedicoResponseDTO> Put([FromRoute] int identificador, MedicoRequestDTO medicoUpdateDTO)
         {
             try
             {
