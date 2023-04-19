@@ -10,10 +10,10 @@ namespace m01_labMedicine.Controllers
     [Route("api/[controller]")]
     public class AtendimentosController : ControllerBase
     {
-        private readonly AtendimentoMedicoContext atendimentoMedicoContext;
+        private readonly LabMedicineContext atendimentoMedicoContext;
 
         //Construtor com parametro (Injetado)   
-        public AtendimentosController(AtendimentoMedicoContext atendimentoMedicoContext) => this.atendimentoMedicoContext = atendimentoMedicoContext;
+        public AtendimentosController(LabMedicineContext atendimentoMedicoContext) => this.atendimentoMedicoContext = atendimentoMedicoContext;
 
         [HttpPut("/api/atendimentos")]
         public ActionResult<AtendimentoResponseDTO> Put([FromBody] AtendimentoRequestDTO atendimentoUpdateDTO)

@@ -8,10 +8,10 @@ namespace m01_labMedicine.Controllers
     [Route("api/[controller]")]
     public class MedicoController : ControllerBase
     {
-        private readonly AtendimentoMedicoContext atendimentoMedicoContext;
+        private readonly LabMedicineContext atendimentoMedicoContext;
 
         //Construtor com parametro (Injetado)   
-        public MedicoController(AtendimentoMedicoContext atendimentoMedicoContext) => this.atendimentoMedicoContext = atendimentoMedicoContext;
+        public MedicoController(LabMedicineContext atendimentoMedicoContext) => this.atendimentoMedicoContext = atendimentoMedicoContext;
 
         [HttpPost("/api/medicos/")]
         public ActionResult<MedicoResponseDTO> Post([FromBody] MedicoRequestDTO medicoDTO)

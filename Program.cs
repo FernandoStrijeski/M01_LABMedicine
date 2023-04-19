@@ -11,7 +11,7 @@ builder.Services.AddSwaggerGen();
 
 string connectionString = "Server=DESKTOP-6HE46OL\\SQLEXPRESS;Database=labmedicinebd;Trusted_Connection=True;TrustServerCertificate=True;";
 //Injeção de Dependencia do Context
-builder.Services.AddDbContext<AtendimentoMedicoContext>(o => o.UseSqlServer(connectionString));
+builder.Services.AddDbContext<LabMedicineContext>(o => o.UseSqlServer(connectionString));
 
 var app = builder.Build();
 

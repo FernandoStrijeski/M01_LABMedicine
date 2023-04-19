@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using m01_labMedicine.Model;
 
@@ -11,12 +10,10 @@ using m01_labMedicine.Model;
 
 namespace m01_labMedicine.Migrations
 {
-    [DbContext(typeof(AtendimentoMedicoContext))]
-    [Migration("20230417225338_InitialCreate")]
-    partial class InitialCreate
+    [DbContext(typeof(LabMedicineContext))]
+    partial class LabMedicineContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,6 +21,33 @@ namespace m01_labMedicine.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("m01_labMedicine.Model.AtendimentoMedicoPacienteModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DescricaoAtendimento")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MedicoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PacienteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicoId");
+
+                    b.HasIndex("PacienteId");
+
+                    b.ToTable("Atendimento_Medico_Paciente");
+                });
 
             modelBuilder.Entity("m01_labMedicine.Model.EnfermeiroModel", b =>
                 {
@@ -49,7 +73,7 @@ namespace m01_labMedicine.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<string>("InstituicaoEnsinoFormacaoo")
+                    b.Property<string>("InstituicaoEnsinoFormacao")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
@@ -175,6 +199,25 @@ namespace m01_labMedicine.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Paciente");
+                });
+
+            modelBuilder.Entity("m01_labMedicine.Model.AtendimentoMedicoPacienteModel", b =>
+                {
+                    b.HasOne("m01_labMedicine.Model.MedicoModel", "Medico")
+                        .WithMany()
+                        .HasForeignKey("MedicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("m01_labMedicine.Model.PacienteModel", "Paciente")
+                        .WithMany()
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Medico");
+
+                    b.Navigation("Paciente");
                 });
 #pragma warning restore 612, 618
         }
