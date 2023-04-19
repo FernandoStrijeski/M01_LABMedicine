@@ -1,4 +1,5 @@
 //using m01_labMedicine.Validation;
+using m01_labMedicine.Extension;
 using m01_labMedicine.Validation;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,13 +8,11 @@ namespace m01_labMedicine.Model
     public class LabMedicineContext : DbContext
     {
         public LabMedicineContext(DbContextOptions<LabMedicineContext> options) : base(options)
-        {             
-            //Todo: Configurar migration
-            //ToDo: Executar os comandos do migration
-            //ToDo: Inserir, Atualizar, Deletar e Selecionar
+        {
+            
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {            
+        {
             modelBuilder.Entity<PacienteModel>()
                 .Property(x => x.Alergias)
                 .HasConversion(c => string.Join(',', c),
@@ -26,6 +25,7 @@ namespace m01_labMedicine.Model
                                c => c.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList())
                 .Metadata.SetValueComparer(new ListValueComparer());
 
+            modelBuilder.CargaInicial();
         }
         public DbSet<PacienteModel> Paciente { get; set; }
         public DbSet<MedicoModel> Medico { get; set; }

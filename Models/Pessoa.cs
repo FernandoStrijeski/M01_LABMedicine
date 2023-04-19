@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace m01_labMedicine.Model
 {
-    [Table("Pessoa")]
     public abstract class Pessoa
     {
         [Key]

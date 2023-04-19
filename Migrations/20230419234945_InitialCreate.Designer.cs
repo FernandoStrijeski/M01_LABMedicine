@@ -12,7 +12,7 @@ using m01_labMedicine.Model;
 namespace m01_labMedicine.Migrations
 {
     [DbContext(typeof(LabMedicineContext))]
-    [Migration("20230419224646_InitialCreate")]
+    [Migration("20230419234945_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
