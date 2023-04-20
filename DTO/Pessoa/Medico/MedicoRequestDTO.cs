@@ -12,7 +12,7 @@ namespace m01_labMedicine.DTO.Pessoa.Medico
         [StringLength(maximumLength: 20)]
         public string CRMUF { get; set; }
         [Required]
-        [checkEspecializacaoClinica(AllowEspecializacoes = "Clínico Geral,Anestesista,Dermatologia,Ginecologia,Neurologia,Pediatria,Psiquiatria,Ortopedia")]
+        [CheckEspecializacaoClinica(AllowEspecializacoes = "Clínico Geral,Anestesista,Dermatologia,Ginecologia,Neurologia,Pediatria,Psiquiatria,Ortopedia")]
         public string EspecializacaoClinica { get; set; }
         [Required]
         [checkSituacao(AllowSituacoes = "Ativo,Inativo")]

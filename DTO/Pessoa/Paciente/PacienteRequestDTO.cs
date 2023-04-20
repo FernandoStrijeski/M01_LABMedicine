@@ -16,7 +16,7 @@ namespace m01_labMedicine.DTO.Pessoa.Paciente
         public List<string> CuidadosEspecificos { get; set; }
         public string Convenio { get; set; }
         [Required]
-        [checkStatusAtendimento(AllowStatus = "AGUARDANDO_ATENDIMENTO,EM_ATENDIMENTO,ATENDIDO,NAO_ATENDIDO")]
+        [CheckStatusAtendimento(AllowStatus = "AGUARDANDO_ATENDIMENTO,EM_ATENDIMENTO,ATENDIDO,NAO_ATENDIDO")]
         public string StatusAtendimento { get; set; }
     }
 }

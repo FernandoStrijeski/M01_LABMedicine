@@ -3,11 +3,11 @@ using System.Text.RegularExpressions;
 
 namespace m01_labMedicine.Validation
 {
-    public class CustomValidation
+    public partial class CustomValidation
     {
-        public sealed class checkStatusAtendimento : ValidationAttribute
+        public sealed class CheckStatusAtendimento : ValidationAttribute
         {
-            public String AllowStatus { get; set; }
+            public string AllowStatus { get; set; }
             public bool AllowStatusNull { get; set; }
 
             protected override ValidationResult IsValid(object statusAtendimento, ValidationContext validationContext)
@@ -27,9 +27,9 @@ namespace m01_labMedicine.Validation
             }
         }
 
-        public sealed class checkEspecializacaoClinica : ValidationAttribute
+        public sealed class CheckEspecializacaoClinica : ValidationAttribute
         {
-            public String AllowEspecializacoes { get; set; }
+            public string AllowEspecializacoes { get; set; }
 
             protected override ValidationResult IsValid(object especializacoes, ValidationContext validationContext)
             {
@@ -46,7 +46,7 @@ namespace m01_labMedicine.Validation
         }
         public sealed class checkSituacao : ValidationAttribute
         {
-            public String AllowSituacoes { get; set; }
+            public string AllowSituacoes { get; set; }
 
             protected override ValidationResult IsValid(object especializacoes, ValidationContext validationContext)
             {
@@ -62,7 +62,7 @@ namespace m01_labMedicine.Validation
             }
         }
 
-        public sealed class checkCPF : ValidationAttribute
+        public sealed class CheckCPF : ValidationAttribute
         {            
             protected override ValidationResult IsValid(object cpf, ValidationContext validationContext)
             {                
@@ -92,14 +92,14 @@ namespace m01_labMedicine.Validation
                 int soma = 0;
                 for (int i = 0; i < 9; i++)
                     soma += int.Parse(cpf[i].ToString()) * (10 - i);
-                int digito1 = 11 - (soma % 11);
+                int digito1 = 11 - soma % 11;
                 if (digito1 >= 10)
                     digito1 = 0;
 
                 soma = 0;
                 for (int i = 0; i < 10; i++)
                     soma += int.Parse(cpf[i].ToString()) * (11 - i);
-                int digito2 = 11 - (soma % 11);
+                int digito2 = 11 - soma % 11;
                 if (digito2 >= 10)
                     digito2 = 0;
 
@@ -112,7 +112,7 @@ namespace m01_labMedicine.Validation
             }
         }
 
-        public sealed class checkTelefone : ValidationAttribute
+        public sealed partial class CheckTelefone : ValidationAttribute
         {
             protected override ValidationResult IsValid(object telefone, ValidationContext validationContext)
             {
@@ -128,7 +128,7 @@ namespace m01_labMedicine.Validation
             public static bool ValidarTelefone(string telefone)
             {
                 // Remove caracteres não numéricos do telefone
-                telefone = Regex.Replace(telefone, @"[^\d]", "");
+                telefone = MyRegex().Replace(telefone, "");
 
                 // Verifica se o telefone/celular possui 10 ou 11 dígitos (com DDD de 2 dígitos)
                 if (telefone.Length != 10 && telefone.Length != 11)

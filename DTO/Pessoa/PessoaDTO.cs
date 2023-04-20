@@ -21,11 +21,11 @@ namespace m01_labMedicine.DTO.Pessoa
         [Required]
         public DateTime DataNascimento { get; set; }
         [Required]
-        [checkCPF]
+        [CheckCPF]
         public string CPF { get; set; }
 
         [AllowNull]
-        [checkTelefone]
+        [CheckTelefone]
         public string Telefone { get; set; }
     }
 }

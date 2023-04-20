@@ -12,6 +12,6 @@ namespace m01_labMedicine.DTO.Pessoa.Paciente
 
         [JsonPropertyName("identificador")]
         public int Codigo { get; set; }
-        public int atendimentos { get; set; }
+        public int Atendimentos { get; set; }
     }
 }

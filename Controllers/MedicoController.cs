@@ -8,10 +8,10 @@ namespace m01_labMedicine.Controllers
     [Route("api/[controller]")]
     public class MedicoController : ControllerBase
     {
-        private readonly LabMedicineContext atendimentoMedicoContext;
+        private readonly LabMedicineContext _atendimentoMedicoContext;
 
         //Construtor com parametro (Injetado)   
-        public MedicoController(LabMedicineContext atendimentoMedicoContext) => this.atendimentoMedicoContext = atendimentoMedicoContext;
+        public MedicoController(LabMedicineContext atendimentoMedicoContext) => _atendimentoMedicoContext = atendimentoMedicoContext;
 
         [HttpPost("/api/medicos/")]
         public ActionResult<MedicoResponseDTO> Post([FromBody] MedicoRequestDTO medicoDTO)
@@ -33,15 +33,15 @@ namespace m01_labMedicine.Controllers
                 };
 
                 //Verificar se existe o Medico no banco de dados
-                var MedicoModelDb = atendimentoMedicoContext.Medico.Where(x => x.CPF == medicoDTO.CPF).FirstOrDefault();
+                var MedicoModelDb = _atendimentoMedicoContext.Medico.Where(x => x.CPF == medicoDTO.CPF).FirstOrDefault();
                 if (MedicoModelDb != null)
                     return Conflict($"Médico com o CPF informado já cadastrado [{MedicoModelDb.NomeCompleto}]!");
 
                 //Add na lista do DBSet Medico
-                atendimentoMedicoContext.Medico.Add(medicoModel);
+                _atendimentoMedicoContext.Medico.Add(medicoModel);
 
                 //Salvar no banco de dados
-                atendimentoMedicoContext.SaveChanges();
+                _atendimentoMedicoContext.SaveChanges();
 
                 MedicoResponseDTO MedicoResponseDTO = new()
                 {
@@ -55,7 +55,7 @@ namespace m01_labMedicine.Controllers
                     CrmUF = medicoModel.CrmUF,
                     EspecializacaoClinica = medicoModel.EspecializacaoClinica,
                     EstadoSistema = medicoModel.EstadoSistema,
-                    atendimentos = medicoModel.TotalAtendimentosRealizados
+                    Atendimentos = medicoModel.TotalAtendimentosRealizados
                 };
 
                 return Created("", MedicoResponseDTO);
@@ -73,7 +73,7 @@ namespace m01_labMedicine.Controllers
             try
             {
                 //Verificar se existe o medico no banco de dados
-                var medicoModel = atendimentoMedicoContext.Medico.Where(x => x.Id == identificador).FirstOrDefault();
+                var medicoModel = _atendimentoMedicoContext.Medico.Where(x => x.Id == identificador).FirstOrDefault();
 
                 if (medicoModel != null)
                 {
@@ -88,10 +88,10 @@ namespace m01_labMedicine.Controllers
                     medicoModel.TotalAtendimentosRealizados = medicoUpdateDTO.TotalAtendimentos;
 
                     //Add na lista do DBSet Medico
-                    atendimentoMedicoContext.Medico.Attach(medicoModel);
+                    _atendimentoMedicoContext.Medico.Attach(medicoModel);
 
                     //Salvar no banco de dados
-                    atendimentoMedicoContext.SaveChanges();
+                    _atendimentoMedicoContext.SaveChanges();
 
                     MedicoResponseDTO medicoResponseDTO = new()
                     {
@@ -105,7 +105,7 @@ namespace m01_labMedicine.Controllers
                         CrmUF = medicoModel.CrmUF,
                         EspecializacaoClinica = medicoModel.EspecializacaoClinica,
                         EstadoSistema = medicoModel.EstadoSistema,
-                        atendimentos = medicoModel.TotalAtendimentosRealizados
+                        Atendimentos = medicoModel.TotalAtendimentosRealizados
                     };
 
                     return Ok(medicoResponseDTO);
@@ -133,10 +133,10 @@ namespace m01_labMedicine.Controllers
                 if (!lstStatus.Contains(status.ToUpper()))
                     return BadRequest("O status informado não existe.");
 
-                medicosInnerJoin = atendimentoMedicoContext.Medico.Where(x => x.EstadoSistema == status);
+                medicosInnerJoin = _atendimentoMedicoContext.Medico.Where(x => x.EstadoSistema == status);
             }
             else
-                medicosInnerJoin = atendimentoMedicoContext.Medico;
+                medicosInnerJoin = _atendimentoMedicoContext.Medico;
 
             if (medicosInnerJoin.Count() > 0)
             {
@@ -154,7 +154,7 @@ namespace m01_labMedicine.Controllers
                         CrmUF = medico.CrmUF,
                         EspecializacaoClinica = medico.EspecializacaoClinica,
                         EstadoSistema = medico.EstadoSistema,
-                        atendimentos = medico.TotalAtendimentosRealizados
+                        Atendimentos = medico.TotalAtendimentosRealizados
                     };
 
                     lista.Add(medicoGet);
@@ -175,7 +175,7 @@ namespace m01_labMedicine.Controllers
         [HttpGet("/api/medicos/{identificador}")]
         public ActionResult<MedicoResponseDTO> GetPorId([FromRoute] int identificador)
         {
-            MedicoModel medicoInnerJoin = atendimentoMedicoContext.Medico.Where(w => w.Id == identificador).FirstOrDefault();
+            MedicoModel medicoInnerJoin = _atendimentoMedicoContext.Medico.Where(w => w.Id == identificador).FirstOrDefault();
             if (medicoInnerJoin == null)
                 return NotFound("Médico não encontrado para o identificador informado.");
 
@@ -191,7 +191,7 @@ namespace m01_labMedicine.Controllers
                 CrmUF = medicoInnerJoin.CrmUF,
                 EspecializacaoClinica = medicoInnerJoin.EspecializacaoClinica,
                 EstadoSistema = medicoInnerJoin.EstadoSistema,
-                atendimentos = medicoInnerJoin.TotalAtendimentosRealizados
+                Atendimentos = medicoInnerJoin.TotalAtendimentosRealizados
             };
 
             return Ok(medicoInnerJoin);
@@ -201,12 +201,12 @@ namespace m01_labMedicine.Controllers
         public ActionResult Delete([FromRoute] int identificador)
         {
             //Verificar se existe no banco de dados
-            var medicoModel = atendimentoMedicoContext.Medico.Find(identificador);
+            var medicoModel = _atendimentoMedicoContext.Medico.Find(identificador);
 
             if (medicoModel != null)
             {
-                atendimentoMedicoContext.Medico.Remove(medicoModel);
-                atendimentoMedicoContext.SaveChanges();
+                _atendimentoMedicoContext.Medico.Remove(medicoModel);
+                _atendimentoMedicoContext.SaveChanges();
 
                 return NoContent();
             }

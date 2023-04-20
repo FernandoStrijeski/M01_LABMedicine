@@ -9,10 +9,10 @@ namespace m01_labMedicine.Controllers
     [Route("api/[controller]")]
     public class EnfermeiroController : ControllerBase
     {
-        private readonly LabMedicineContext atendimentoMedicoContext;
+        private readonly LabMedicineContext _atendimentoMedicoContext;
 
         //Construtor com parametro (Injetado)   
-        public EnfermeiroController(LabMedicineContext atendimentoMedicoContext) => this.atendimentoMedicoContext = atendimentoMedicoContext;
+        public EnfermeiroController(LabMedicineContext atendimentoMedicoContext) => _atendimentoMedicoContext = atendimentoMedicoContext;
 
         [HttpPost("/api/enfermeiros/")]
         public ActionResult<EnfermeiroResponseDTO> Post([FromBody] EnfermeiroRequestDTO enfermeiroRequestDTO)
@@ -31,15 +31,15 @@ namespace m01_labMedicine.Controllers
                 };
 
                 //Verificar se existe o Enfermeiro no banco de dados
-                var EnfermeiroModelDb = atendimentoMedicoContext.Enfermeiro.Where(x => x.CPF == enfermeiroRequestDTO.CPF).FirstOrDefault();
+                var EnfermeiroModelDb = _atendimentoMedicoContext.Enfermeiro.Where(x => x.CPF == enfermeiroRequestDTO.CPF).FirstOrDefault();
                 if (EnfermeiroModelDb != null)
                     return Conflict($"Enfermeiro com o CPF informado já cadastrado [{EnfermeiroModelDb.NomeCompleto}]!");
 
                 //Add na lista do DBSet Enfermeiro
-                atendimentoMedicoContext.Enfermeiro.Add(enfermeiroModel);
+                _atendimentoMedicoContext.Enfermeiro.Add(enfermeiroModel);
 
                 //Salvar no banco de dados
-                atendimentoMedicoContext.SaveChanges();
+                _atendimentoMedicoContext.SaveChanges();
 
                 EnfermeiroResponseDTO EnfermeiroResponseDTO = new()
                 {
@@ -69,7 +69,7 @@ namespace m01_labMedicine.Controllers
             try
             {
                 //Verificar se existe o Enfermeiro no banco de dados
-                var enfermeiroModel = atendimentoMedicoContext.Enfermeiro.Where(x => x.Id == identificador).FirstOrDefault();
+                var enfermeiroModel = _atendimentoMedicoContext.Enfermeiro.Where(x => x.Id == identificador).FirstOrDefault();
 
                 if (enfermeiroModel != null)
                 {
@@ -81,10 +81,10 @@ namespace m01_labMedicine.Controllers
                     enfermeiroModel.CofenUF = enfermeiroUpdateDTO.CofenUF;
 
                     //Add na lista do DBSet Enfermeiro
-                    atendimentoMedicoContext.Enfermeiro.Attach(enfermeiroModel);
+                    _atendimentoMedicoContext.Enfermeiro.Attach(enfermeiroModel);
 
                     //Salvar no banco de dados
-                    atendimentoMedicoContext.SaveChanges();
+                    _atendimentoMedicoContext.SaveChanges();
 
                     EnfermeiroResponseDTO enfermeiroResponseDTO = new()
                     {
@@ -117,7 +117,7 @@ namespace m01_labMedicine.Controllers
             List<EnfermeiroResponseDTO> lista = new();
             IQueryable<EnfermeiroModel> enfermeirosInnerJoin;
 
-            enfermeirosInnerJoin = atendimentoMedicoContext.Enfermeiro;
+            enfermeirosInnerJoin = _atendimentoMedicoContext.Enfermeiro;
 
             if (enfermeirosInnerJoin.Count() > 0)
             {
@@ -148,7 +148,7 @@ namespace m01_labMedicine.Controllers
         [HttpGet("/api/enfermeiros/{identificador}")]
         public ActionResult<EnfermeiroResponseDTO> GetPorId([FromRoute] int identificador)
         {
-            EnfermeiroModel enfermeiroInnerJoin = atendimentoMedicoContext.Enfermeiro.Where(w => w.Id == identificador).FirstOrDefault();
+            EnfermeiroModel enfermeiroInnerJoin = _atendimentoMedicoContext.Enfermeiro.Where(w => w.Id == identificador).FirstOrDefault();
             if (enfermeiroInnerJoin == null)
                 return NotFound("Enfermeiro não encontrado para o identificador informado.");
 
@@ -171,12 +171,12 @@ namespace m01_labMedicine.Controllers
         public ActionResult Delete([FromRoute] int identificador)
         {
             //Verificar se existe no banco de dados
-            var enfermeiroModel = atendimentoMedicoContext.Enfermeiro.Find(identificador);
+            var enfermeiroModel = _atendimentoMedicoContext.Enfermeiro.Find(identificador);
 
             if (enfermeiroModel != null)
             {
-                atendimentoMedicoContext.Enfermeiro.Remove(enfermeiroModel);
-                atendimentoMedicoContext.SaveChanges();
+                _atendimentoMedicoContext.Enfermeiro.Remove(enfermeiroModel);
+                _atendimentoMedicoContext.SaveChanges();
 
                 return NoContent();
             }

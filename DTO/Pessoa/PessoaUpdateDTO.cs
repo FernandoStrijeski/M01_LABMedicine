@@ -17,7 +17,7 @@ namespace m01_labMedicine.DTO.Pessoa
         public DateTime DataNascimento { get; set; }
 
         [AllowNull]
-        [checkTelefone]
+        [CheckTelefone]
         public string Telefone { get; set; }
     }
 }

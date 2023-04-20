@@ -9,10 +9,10 @@ namespace m01_labMedicine.Controllers
     [Route("api/[controller]")]
     public class PacienteController : ControllerBase
     {
-        private readonly LabMedicineContext atendimentoMedicoContext;
+        private readonly LabMedicineContext _atendimentoMedicoContext;
 
         //Construtor com parametro (Injetado)   
-        public PacienteController(LabMedicineContext atendimentoMedicoContext) => this.atendimentoMedicoContext = atendimentoMedicoContext;
+        public PacienteController(LabMedicineContext atendimentoMedicoContext) => _atendimentoMedicoContext = atendimentoMedicoContext;
 
 
         [HttpPost("/api/pacientes/")]
@@ -36,15 +36,15 @@ namespace m01_labMedicine.Controllers
                 };
 
                 //Verificar se existe o Paciente no banco de dados
-                var pacienteModelDb = atendimentoMedicoContext.Paciente.Where(x => x.CPF == pacienteDTO.CPF).FirstOrDefault();
+                var pacienteModelDb = _atendimentoMedicoContext.Paciente.Where(x => x.CPF == pacienteDTO.CPF).FirstOrDefault();
                 if (pacienteModelDb != null)
                     return Conflict($"Paciente com o CPF informado já cadastrado [{pacienteModelDb.NomeCompleto}]!");
 
                 //Add na lista do DBSet Paciente
-                atendimentoMedicoContext.Paciente.Add(pacienteModel);
+                _atendimentoMedicoContext.Paciente.Add(pacienteModel);
 
                 //Salvar no banco de dados
-                atendimentoMedicoContext.SaveChanges();
+                _atendimentoMedicoContext.SaveChanges();
 
                 PacienteResponseDTO pacienteResponseDTO = new()
                 {
@@ -59,7 +59,7 @@ namespace m01_labMedicine.Controllers
                     CuidadosEspecificos = pacienteModel.CuidadosEspecificos,
                     Convenio = pacienteModel.Convenio,
                     StatusAtendimento = pacienteModel.StatusAtendimento,
-                    atendimentos = pacienteModel.TotalAtendimentos
+                    Atendimentos = pacienteModel.TotalAtendimentos
                 };
 
                 return Created("", pacienteResponseDTO);
@@ -77,7 +77,7 @@ namespace m01_labMedicine.Controllers
             try
             {
                 //Verificar se existe o paciente no banco de dados
-                var pacienteModel = atendimentoMedicoContext.Paciente.Where(x => x.Id == identificador).FirstOrDefault();
+                var pacienteModel = _atendimentoMedicoContext.Paciente.Where(x => x.Id == identificador).FirstOrDefault();
 
                 if (pacienteModel != null)
                 {
@@ -92,10 +92,10 @@ namespace m01_labMedicine.Controllers
                     pacienteModel.StatusAtendimento = pacienteUpdateDTO.StatusAtendimento;
 
                     //Add na lista do DBSet Paciente
-                    atendimentoMedicoContext.Paciente.Attach(pacienteModel);
+                    _atendimentoMedicoContext.Paciente.Attach(pacienteModel);
 
                     //Salvar no banco de dados
-                    atendimentoMedicoContext.SaveChanges();
+                    _atendimentoMedicoContext.SaveChanges();
 
                     PacienteResponseDTO pacienteResponseDTO = new()
                     {
@@ -110,7 +110,7 @@ namespace m01_labMedicine.Controllers
                         CuidadosEspecificos = pacienteModel.CuidadosEspecificos,
                         Convenio = pacienteModel.Convenio,
                         StatusAtendimento = pacienteModel.StatusAtendimento,
-                        atendimentos = pacienteModel.TotalAtendimentos
+                        Atendimentos = pacienteModel.TotalAtendimentos
                     };
 
                     return Ok(pacienteResponseDTO);
@@ -129,12 +129,12 @@ namespace m01_labMedicine.Controllers
         public ActionResult Delete([FromRoute] int identificador)
         {
             //Verificar se existe no banco de dados
-            var pacienteModel = atendimentoMedicoContext.Paciente.Find(identificador);
+            var pacienteModel = _atendimentoMedicoContext.Paciente.Find(identificador);
 
             if (pacienteModel != null)
             {
-                atendimentoMedicoContext.Paciente.Remove(pacienteModel);
-                atendimentoMedicoContext.SaveChanges();
+                _atendimentoMedicoContext.Paciente.Remove(pacienteModel);
+                _atendimentoMedicoContext.SaveChanges();
 
                 return NoContent();
             }
@@ -151,10 +151,10 @@ namespace m01_labMedicine.Controllers
 
             if (status.StatusAtendimento != null)
             {
-                pacientesInnerJoin = atendimentoMedicoContext.Paciente.Where(x => x.StatusAtendimento == status.StatusAtendimento);
+                pacientesInnerJoin = _atendimentoMedicoContext.Paciente.Where(x => x.StatusAtendimento == status.StatusAtendimento);
             }
             else
-                pacientesInnerJoin = atendimentoMedicoContext.Paciente;
+                pacientesInnerJoin = _atendimentoMedicoContext.Paciente;
 
             if (pacientesInnerJoin.Count() > 0)
             {
@@ -173,7 +173,7 @@ namespace m01_labMedicine.Controllers
                         CuidadosEspecificos = paciente.CuidadosEspecificos,
                         Convenio = paciente.Convenio,
                         StatusAtendimento = paciente.StatusAtendimento,
-                        atendimentos = paciente.TotalAtendimentos
+                        Atendimentos = paciente.TotalAtendimentos
                     };
 
                     lista.Add(pacienteGet);
@@ -194,7 +194,7 @@ namespace m01_labMedicine.Controllers
         [HttpGet("/api/pacientes/{identificador}")]
         public ActionResult<PacienteResponseDTO> GetPorId([FromRoute] int identificador)
         {
-            PacienteModel pacienteInnerJoin = atendimentoMedicoContext.Paciente.Where(w => w.Id == identificador).FirstOrDefault();
+            PacienteModel pacienteInnerJoin = _atendimentoMedicoContext.Paciente.Where(w => w.Id == identificador).FirstOrDefault();
             if (pacienteInnerJoin == null)
                 return NotFound("Paciente não encontrado para o identificador informado.");
 
@@ -211,7 +211,7 @@ namespace m01_labMedicine.Controllers
                 CuidadosEspecificos = pacienteInnerJoin.CuidadosEspecificos,
                 Convenio = pacienteInnerJoin.Convenio,
                 StatusAtendimento = pacienteInnerJoin.StatusAtendimento,
-                atendimentos = pacienteInnerJoin.TotalAtendimentos
+                Atendimentos = pacienteInnerJoin.TotalAtendimentos
             };
 
             return Ok(pacienteInnerJoin);
