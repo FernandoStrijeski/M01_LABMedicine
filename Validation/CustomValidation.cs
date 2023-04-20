@@ -17,13 +17,9 @@ namespace m01_labMedicine.Validation
 
                 string[] myarr = AllowStatus.ToString().Split(',');
                 if (myarr.Contains(statusAtendimento))
-                {
                     return ValidationResult.Success;
-                }
-                else
-                {
-                    return new ValidationResult("Por favor, informar um status válido! Ex. [" + AllowStatus.ToString() + "]");
-                }
+
+                return new ValidationResult($"Por favor, informar um status válido! Ex. [{AllowStatus}]");
             }
         }
 
@@ -35,16 +31,12 @@ namespace m01_labMedicine.Validation
             {
                 string[] myarr = AllowEspecializacoes.ToString().Split(',');
                 if (myarr.Contains(especializacoes))
-                {
                     return ValidationResult.Success;
-                }
-                else
-                {
-                    return new ValidationResult("Por favor, informar uma especialização válida! Ex. [" + AllowEspecializacoes.ToString() + "]");
-                }
+                
+                return new ValidationResult($"Por favor, informar uma especialização válida! Ex. [{AllowEspecializacoes}]");
             }
         }
-        public sealed class checkSituacao : ValidationAttribute
+        public sealed class CheckSituacao : ValidationAttribute
         {
             public string AllowSituacoes { get; set; }
 
@@ -52,13 +44,9 @@ namespace m01_labMedicine.Validation
             {
                 string[] myarr = AllowSituacoes.ToString().Split(',');
                 if (myarr.Contains(especializacoes))
-                {
                     return ValidationResult.Success;
-                }
-                else
-                {
-                    return new ValidationResult("Por favor, informar uma especialização válida! Ex. [" + AllowSituacoes.ToString() + "]");
-                }
+                
+                return new ValidationResult($"Por favor, informar uma especialização válida! Ex. [{AllowSituacoes}]");
             }
         }
 
@@ -67,13 +55,9 @@ namespace m01_labMedicine.Validation
             protected override ValidationResult IsValid(object cpf, ValidationContext validationContext)
             {                
                 if (ValidarCPF(cpf.ToString()))
-                {
                     return ValidationResult.Success;
-                }
-                else
-                {
-                    return new ValidationResult("Por favor, informar um CPF válido, somente números!");
-                }
+                
+                return new ValidationResult("Por favor, informar um CPF válido, somente números!");
             }
             public static bool ValidarCPF(string cpf)
             {
@@ -116,19 +100,16 @@ namespace m01_labMedicine.Validation
         {
             protected override ValidationResult IsValid(object telefone, ValidationContext validationContext)
             {
-                if (telefone == null || ValidarTelefone(telefone.ToString()))
-                {
-                    return ValidationResult.Success;
-                }
-                else
-                {
-                    return new ValidationResult("Por favor, informar um telefone válido, somente números!");
-                }
+                if (telefone == null || ValidarTelefone(telefone.ToString()))                
+                    return ValidationResult.Success;                
+                             
+                return new ValidationResult("Por favor, informar um telefone válido, somente números!");               
             }
+
             public static bool ValidarTelefone(string telefone)
             {
                 // Remove caracteres não numéricos do telefone
-                telefone = MyRegex().Replace(telefone, "");
+                telefone = Regex.Replace(telefone, @"[^\d]", "");
 
                 // Verifica se o telefone/celular possui 10 ou 11 dígitos (com DDD de 2 dígitos)
                 if (telefone.Length != 10 && telefone.Length != 11)

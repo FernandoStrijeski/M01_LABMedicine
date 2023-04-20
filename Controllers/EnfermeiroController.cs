@@ -50,8 +50,7 @@ namespace m01_labMedicine.Controllers
                     CPF = enfermeiroModel.CPF,
                     Telefone = enfermeiroModel.Telefone,
                     InstituicaoEnsino = enfermeiroRequestDTO.InstituicaoEnsino,
-                    CofenUF = enfermeiroRequestDTO.CofenUF //,
-                    //atendimentos = enfermeiroModel.TotalAtendimentosRealizados
+                    CofenUF = enfermeiroRequestDTO.CofenUF
                 };
 
                 return Created("", EnfermeiroResponseDTO);

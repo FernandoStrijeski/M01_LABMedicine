@@ -4,12 +4,10 @@ using Microsoft.Build.Framework;
 
 namespace m01_labMedicine.DTO.Atendimento
 {
-    public class AtendimentoResponseDTO
+    public class AtendimentoMedicoResponseDTO
     {
-        [Required]
         public MedicoResponseDTO Medico { get; set; }
-
-        [Required]
         public PacienteResponseDTO Paciente { get; set; }
+        public string DescricaoAtendimento { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace m01_labMedicine.DTO.Pessoa.Medico
         [CheckEspecializacaoClinica(AllowEspecializacoes = "Clínico Geral,Anestesista,Dermatologia,Ginecologia,Neurologia,Pediatria,Psiquiatria,Ortopedia")]
         public string EspecializacaoClinica { get; set; }
         [Required]
-        [checkSituacao(AllowSituacoes = "Ativo,Inativo")]
+        [CheckSituacao(AllowSituacoes = "Ativo,Inativo")]
         public string SituacaoSistema { get; set; }
         public int TotalAtendimentos { get; set; }
     }

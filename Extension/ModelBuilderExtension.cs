@@ -5,6 +5,7 @@ namespace m01_labMedicine.Extension
 {
     public static class ModelBuilderExtension
     {
+        //seeder
         public static ModelBuilder CargaInicial(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PacienteModel>()
@@ -20,12 +21,12 @@ namespace m01_labMedicine.Extension
                          new PacienteModel() { Id = 10, NomeCompleto = "Paulo Pedrozo", CPF = "61067801022", DataNascimento = DateTime.Parse("18/12/1990"), Genero = "Masculino", Telefone = "51996566996", ContatoEmergencia = "Renan", StatusAtendimento = "AGUARDANDO_ATENDIMENTO" });
 
             modelBuilder.Entity<MedicoModel>()
-                .HasData(new MedicoModel() { Id = 1, NomeCompleto = "Amanda Duarte", CPF = "27580525046", DataNascimento = DateTime.Parse("15/03/1966"), Genero = "Feminino", Telefone = "51991144444", InstituicaoEnsinoFormacao = "UFGRS", CrmUF = "1234567", EspecializacaoClinica = "Clínico Geral", EstadoSistema = "Ativo" },
-                         new MedicoModel() { Id = 2, NomeCompleto = "Vitor Moraes", CPF = "61164709046", DataNascimento = DateTime.Parse("16/04/1977"), Genero = "Masculino", Telefone = "51987220022", InstituicaoEnsinoFormacao = "Ulbra", CrmUF = "2345678", EspecializacaoClinica = "Dermatologia", EstadoSistema = "Ativo" });
+                .HasData(new MedicoModel() { Id = 11, NomeCompleto = "Amanda Duarte", CPF = "27580525046", DataNascimento = DateTime.Parse("15/03/1966"), Genero = "Feminino", Telefone = "51991144444", InstituicaoEnsinoFormacao = "UFGRS", CrmUF = "1234567", EspecializacaoClinica = "Clínico Geral", EstadoSistema = "Ativo" },
+                         new MedicoModel() { Id = 12, NomeCompleto = "Vitor Moraes", CPF = "61164709046", DataNascimento = DateTime.Parse("16/04/1977"), Genero = "Masculino", Telefone = "51987220022", InstituicaoEnsinoFormacao = "Ulbra", CrmUF = "2345678", EspecializacaoClinica = "Dermatologia", EstadoSistema = "Ativo" });
             
             modelBuilder.Entity<EnfermeiroModel>()
-                .HasData(new EnfermeiroModel() { Id = 1, NomeCompleto = "Lucas Nascimento", CPF = "29949606055", DataNascimento = DateTime.Parse("17/05/1988"), Genero = "Masculino", Telefone = "51991232145", InstituicaoEnsinoFormacao = "PUCRS", CofenUF = "9876543" },
-                         new EnfermeiroModel() { Id = 2, NomeCompleto = "Tatiana Lopes", CPF = "31533137099", DataNascimento = DateTime.Parse("18/06/1999"), Genero = "Feminino", Telefone = "51991234564", InstituicaoEnsinoFormacao = "UNISP", CofenUF = "8765432" });
+                .HasData(new EnfermeiroModel() { Id = 13, NomeCompleto = "Lucas Nascimento", CPF = "29949606055", DataNascimento = DateTime.Parse("17/05/1988"), Genero = "Masculino", Telefone = "51991232145", InstituicaoEnsinoFormacao = "PUCRS", CofenUF = "9876543" },
+                         new EnfermeiroModel() { Id = 14, NomeCompleto = "Tatiana Lopes", CPF = "31533137099", DataNascimento = DateTime.Parse("18/06/1999"), Genero = "Feminino", Telefone = "51991234564", InstituicaoEnsinoFormacao = "UNISP", CofenUF = "8765432" });
 
             return modelBuilder;
         }

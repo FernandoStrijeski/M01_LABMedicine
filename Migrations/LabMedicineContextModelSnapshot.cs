@@ -22,7 +22,7 @@ namespace m01_labMedicine.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("m01_labMedicine.Model.AtendimentoMedicoPacienteModel", b =>
+            modelBuilder.Entity("m01_labMedicine.Model.AtendimentoMedicoModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,6 +59,7 @@ namespace m01_labMedicine.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CPF")
+                        .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
@@ -89,12 +90,15 @@ namespace m01_labMedicine.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CPF")
+                        .IsUnique();
+
                     b.ToTable("Enfermeiro");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = 13,
                             CPF = "29949606055",
                             CofenUF = "9876543",
                             DataNascimento = new DateTime(1988, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -105,7 +109,7 @@ namespace m01_labMedicine.Migrations
                         },
                         new
                         {
-                            Id = 2,
+                            Id = 14,
                             CPF = "31533137099",
                             CofenUF = "8765432",
                             DataNascimento = new DateTime(1999, 6, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -126,6 +130,7 @@ namespace m01_labMedicine.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CPF")
+                        .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
@@ -167,12 +172,15 @@ namespace m01_labMedicine.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CPF")
+                        .IsUnique();
+
                     b.ToTable("Medico");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = 11,
                             CPF = "27580525046",
                             CrmUF = "1234567",
                             DataNascimento = new DateTime(1966, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -186,7 +194,7 @@ namespace m01_labMedicine.Migrations
                         },
                         new
                         {
-                            Id = 2,
+                            Id = 12,
                             CPF = "61164709046",
                             CrmUF = "2345678",
                             DataNascimento = new DateTime(1977, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -213,6 +221,7 @@ namespace m01_labMedicine.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CPF")
+                        .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
@@ -251,6 +260,9 @@ namespace m01_labMedicine.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CPF")
+                        .IsUnique();
 
                     b.ToTable("Paciente");
 
@@ -397,18 +409,18 @@ namespace m01_labMedicine.Migrations
                         });
                 });
 
-            modelBuilder.Entity("m01_labMedicine.Model.AtendimentoMedicoPacienteModel", b =>
+            modelBuilder.Entity("m01_labMedicine.Model.AtendimentoMedicoModel", b =>
                 {
                     b.HasOne("m01_labMedicine.Model.MedicoModel", "Medico")
                         .WithMany()
                         .HasForeignKey("MedicoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("m01_labMedicine.Model.PacienteModel", "Paciente")
                         .WithMany()
                         .HasForeignKey("PacienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Medico");

@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace m01_labMedicine.Model
 {
     [Table("Atendimento_Medico_Paciente")]
-    public class AtendimentoMedicoPacienteModel
+    public class AtendimentoMedicoModel
     {
         [Key]
         [Column("Id")]
