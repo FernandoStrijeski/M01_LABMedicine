@@ -103,7 +103,7 @@ namespace m01_labMedicine.Validation
                 if (telefone == null || ValidarTelefone(telefone.ToString()))                
                     return ValidationResult.Success;                
                              
-                return new ValidationResult("Por favor, informar um telefone válido, somente números!");               
+                return new ValidationResult("Por favor, informar um telefone válido contendo DDD, somente números!");               
             }
 
             public static bool ValidarTelefone(string telefone)

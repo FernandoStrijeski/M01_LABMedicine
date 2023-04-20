@@ -1,4 +1,5 @@
 using m01_labMedicine.Model;
+using m01_labMedicine.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ builder.Services.AddSwaggerGen();
 string connectionString = "Server=DESKTOP-6HE46OL\\SQLEXPRESS;Database=labmedicinebd;Trusted_Connection=True;TrustServerCertificate=True;";
 //Injeção de Dependencia do Context
 builder.Services.AddDbContext<LabMedicineContext>(o => o.UseSqlServer(connectionString));
+builder.Services.AddScoped<IPacienteService, PacienteService>();
 
 var app = builder.Build();
 
