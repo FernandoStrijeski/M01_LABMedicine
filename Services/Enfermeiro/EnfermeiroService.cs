@@ -2,9 +2,7 @@
 using m01_labMedicine.Core.Exceptions;
 using m01_labMedicine.DTO.Pessoa.Enfermeiro;
 using m01_labMedicine.DTO.Pessoa.Medico;
-using m01_labMedicine.DTO.Pessoa.Paciente;
 using m01_labMedicine.Model;
-using System.Text.RegularExpressions;
 
 namespace m01_labMedicine.Services.Enfermeiro
 {

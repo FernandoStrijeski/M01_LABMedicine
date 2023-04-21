@@ -1,11 +1,7 @@
 using m01_labMedicine.Core.Exceptions;
 using m01_labMedicine.DTO.Atendimento;
-using m01_labMedicine.DTO.Pessoa.Medico;
-using m01_labMedicine.DTO.Pessoa.Paciente;
-using m01_labMedicine.Model;
 using m01_labMedicine.Services.AtendimentoMedico;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace m01_labMedicine.Controllers
 {

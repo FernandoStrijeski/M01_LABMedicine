@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using m01_labMedicine.Core.Exceptions;
 using m01_labMedicine.DTO.Pessoa.Medico;
-using m01_labMedicine.DTO.Pessoa.Paciente;
 using m01_labMedicine.Model;
-using System.Text.RegularExpressions;
 
 namespace m01_labMedicine.Services.Medico
 {
@@ -19,20 +17,6 @@ namespace m01_labMedicine.Services.Medico
             try
             {
                 var medicoModel = _mapper.Map<MedicoModel>(medicoDTO);
-
-                //MedicoModel medicoModel = new()
-                //{
-                //    NomeCompleto = medicoDTO.Nome,
-                //    Genero = medicoDTO.Genero,
-                //    DataNascimento = medicoDTO.DataNascimento,
-                //    CPF = medicoDTO.CPF,
-                //    Telefone = medicoDTO.Telefone,
-                //    InstituicaoEnsinoFormacao = medicoDTO.InstituicaoEnsino,
-                //    CrmUF = medicoDTO.CRMUF,
-                //    EspecializacaoClinica = medicoDTO.EspecializacaoClinica,
-                //    EstadoSistema = medicoDTO.SituacaoSistema,
-                //    TotalAtendimentosRealizados = medicoDTO.TotalAtendimentos
-                //};
 
                 //Verificar se existe o Medico no banco de dados
                 var MedicoModelDb = _labMedicineContext.Medico.Where(x => x.CPF == medicoDTO.CPF).FirstOrDefault();
