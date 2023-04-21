@@ -14,6 +14,9 @@ string connectionString = "Server=DESKTOP-6HE46OL\\SQLEXPRESS;Database=labmedici
 //Injeção de Dependencia do Context
 builder.Services.AddDbContext<LabMedicineContext>(o => o.UseSqlServer(connectionString));
 builder.Services.AddScoped<IPacienteService, PacienteService>();
+builder.Services.AddScoped<IMedicoService, MedicoService>();
+builder.Services.AddScoped<IEnfermeiroService, EnfermeiroService>();
+builder.Services.AddScoped<IAtendimentoMedicoService, AtendimentoMedicoService>();
 
 var app = builder.Build();
 

@@ -15,7 +15,6 @@ namespace m01_labMedicine.Services
         {
             try
             {
-
                 PacienteModel pacienteModel = new()
                 {
                     NomeCompleto = pacienteDTO.Nome,

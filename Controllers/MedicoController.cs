@@ -1,5 +1,8 @@
 using m01_labMedicine.DTO.Pessoa.Medico;
+using m01_labMedicine.DTO.Pessoa.Paciente;
+using m01_labMedicine.Extension;
 using m01_labMedicine.Model;
+using m01_labMedicine.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace m01_labMedicine.Controllers
@@ -9,61 +12,27 @@ namespace m01_labMedicine.Controllers
     public class MedicoController : ControllerBase
     {
         private readonly LabMedicineContext _atendimentoMedicoContext;
+        private readonly IMedicoService _medicoService;
 
         //Construtor com parametro (Injetado)   
-        public MedicoController(LabMedicineContext atendimentoMedicoContext) => _atendimentoMedicoContext = atendimentoMedicoContext;
+        public MedicoController(IMedicoService medicoService) => _medicoService = medicoService;
+        
 
         [HttpPost("/api/medicos/")]
         public ActionResult<MedicoResponseDTO> Post([FromBody] MedicoRequestDTO medicoDTO)
         {
             try
             {
-                MedicoModel medicoModel = new()
-                {
-                    NomeCompleto = medicoDTO.Nome,
-                    Genero = medicoDTO.Genero,
-                    DataNascimento = medicoDTO.DataNascimento,
-                    CPF = medicoDTO.CPF,
-                    Telefone = medicoDTO.Telefone,
-                    InstituicaoEnsinoFormacao = medicoDTO.InstituicaoEnsino,
-                    CrmUF = medicoDTO.CRMUF,
-                    EspecializacaoClinica = medicoDTO.EspecializacaoClinica,
-                    EstadoSistema = medicoDTO.SituacaoSistema,
-                    TotalAtendimentosRealizados = medicoDTO.TotalAtendimentos
-                };
-
-                //Verificar se existe o Medico no banco de dados
-                var MedicoModelDb = _atendimentoMedicoContext.Medico.Where(x => x.CPF == medicoDTO.CPF).FirstOrDefault();
-                if (MedicoModelDb != null)
-                    return Conflict($"Médico com o CPF informado já cadastrado [{MedicoModelDb.NomeCompleto}]!");
-
-                //Add na lista do DBSet Medico
-                _atendimentoMedicoContext.Medico.Add(medicoModel);
-
-                //Salvar no banco de dados
-                _atendimentoMedicoContext.SaveChanges();
-
-                MedicoResponseDTO MedicoResponseDTO = new()
-                {
-                    Codigo = medicoModel.Id,
-                    Nome = medicoModel.NomeCompleto,
-                    Genero = medicoModel.Genero,
-                    DataNascimento = medicoModel.DataNascimento,
-                    CPF = medicoModel.CPF,
-                    Telefone = medicoModel.Telefone,
-                    InstituicaoEnsinoFormacao = medicoModel.InstituicaoEnsinoFormacao,
-                    CrmUF = medicoModel.CrmUF,
-                    EspecializacaoClinica = medicoModel.EspecializacaoClinica,
-                    EstadoSistema = medicoModel.EstadoSistema,
-                    Atendimentos = medicoModel.TotalAtendimentosRealizados
-                };
-
-                return Created("", MedicoResponseDTO);
-
+                MedicoResponseDTO medicoResponseDTO = _medicoService.Insere(medicoDTO);
+                return Created("", medicoResponseDTO);
+            }
+            catch (MyException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.Message);
             }
             catch (Exception)
             {
-                return BadRequest("Dados inválidos!");
+                return BadRequest($"Ocorreu um erro na requisição! Tente novamente mais tarde.");
             }
         }
 
@@ -72,51 +41,16 @@ namespace m01_labMedicine.Controllers
         {
             try
             {
-                //Verificar se existe o medico no banco de dados
-                var medicoModel = _atendimentoMedicoContext.Medico.Where(x => x.Id == identificador).FirstOrDefault();
-
-                if (medicoModel != null)
-                {
-                    medicoModel.NomeCompleto = medicoUpdateDTO.Nome;
-                    medicoModel.Genero = medicoUpdateDTO.Genero;
-                    medicoModel.DataNascimento = medicoUpdateDTO.DataNascimento;
-                    medicoModel.Telefone = medicoUpdateDTO.Telefone;
-                    medicoModel.InstituicaoEnsinoFormacao = medicoUpdateDTO.InstituicaoEnsino;
-                    medicoModel.CrmUF = medicoUpdateDTO.CRMUF;
-                    medicoModel.EspecializacaoClinica = medicoUpdateDTO.EspecializacaoClinica;
-                    medicoModel.EstadoSistema = medicoUpdateDTO.SituacaoSistema;
-                    medicoModel.TotalAtendimentosRealizados = medicoUpdateDTO.TotalAtendimentos;
-
-                    //Add na lista do DBSet Medico
-                    _atendimentoMedicoContext.Medico.Attach(medicoModel);
-
-                    //Salvar no banco de dados
-                    _atendimentoMedicoContext.SaveChanges();
-
-                    MedicoResponseDTO medicoResponseDTO = new()
-                    {
-                        Codigo = medicoModel.Id,
-                        Nome = medicoModel.NomeCompleto,
-                        Genero = medicoModel.Genero,
-                        DataNascimento = medicoModel.DataNascimento,
-                        CPF = medicoModel.CPF,
-                        Telefone = medicoModel.Telefone,
-                        InstituicaoEnsinoFormacao = medicoModel.InstituicaoEnsinoFormacao,
-                        CrmUF = medicoModel.CrmUF,
-                        EspecializacaoClinica = medicoModel.EspecializacaoClinica,
-                        EstadoSistema = medicoModel.EstadoSistema,
-                        Atendimentos = medicoModel.TotalAtendimentosRealizados
-                    };
-
-                    return Ok(medicoResponseDTO);
-                }
-                else
-                    return NotFound("Médico não encontrado com o identificador informado.");
-
+                MedicoResponseDTO medicoResponseDTO = _medicoService.Atualiza(identificador, medicoUpdateDTO);
+                return Ok(medicoResponseDTO);
+            }
+            catch (MyException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.Message);
             }
             catch (Exception)
             {
-                return BadRequest("Dados inválidos!");
+                return BadRequest($"Ocorreu um erro na requisição! Tente novamente mais tarde.");
             }
         }
 
@@ -124,50 +58,18 @@ namespace m01_labMedicine.Controllers
         [HttpGet("/api/medicos")]
         public ActionResult<List<MedicoResponseDTO>> Get(string status = "")
         {
-            List<MedicoResponseDTO> lista = new();
-            IQueryable<MedicoModel> medicosInnerJoin;
-
-            if (status != "")
+            try
             {
-                List<string> lstStatus = new(new string[] { "ATIVO", "INATIVO" });
-                if (!lstStatus.Contains(status.ToUpper()))
-                    return BadRequest("O status informado não existe.");
-
-                medicosInnerJoin = _atendimentoMedicoContext.Medico.Where(x => x.EstadoSistema == status);
+                List<MedicoResponseDTO> medicosResponseDTO = _medicoService.BuscaMedicos(status);
+                return Ok(medicosResponseDTO);
             }
-            else
-                medicosInnerJoin = _atendimentoMedicoContext.Medico;
-
-            if (medicosInnerJoin.Count() > 0)
+            catch (MyException ex)
             {
-                foreach (var medico in medicosInnerJoin)
-                {
-                    MedicoResponseDTO medicoGet = new()
-                    {
-                        Codigo = medico.Id,
-                        Nome = medico.NomeCompleto,
-                        Genero = medico.Genero,
-                        DataNascimento = medico.DataNascimento,
-                        CPF = medico.CPF,
-                        Telefone = medico.Telefone,
-                        InstituicaoEnsinoFormacao = medico.InstituicaoEnsinoFormacao,
-                        CrmUF = medico.CrmUF,
-                        EspecializacaoClinica = medico.EspecializacaoClinica,
-                        EstadoSistema = medico.EstadoSistema,
-                        Atendimentos = medico.TotalAtendimentosRealizados
-                    };
-
-                    lista.Add(medicoGet);
-                }
-
-                return Ok(lista);
+                return StatusCode(ex.ErrorCode, ex.Message);
             }
-            else
+            catch (Exception)
             {
-                if (status != "")
-                    return NotFound("Nenhum médico encontrado para o status informado.");
-                else
-                    return NotFound("Nenhum médico cadastrado.");
+                return BadRequest($"Ocorreu um erro na requisição! Tente novamente mais tarde.");
             }
         }
 
@@ -175,43 +77,37 @@ namespace m01_labMedicine.Controllers
         [HttpGet("/api/medicos/{identificador}")]
         public ActionResult<MedicoResponseDTO> GetPorId([FromRoute] int identificador)
         {
-            MedicoModel medicoInnerJoin = _atendimentoMedicoContext.Medico.Where(w => w.Id == identificador).FirstOrDefault();
-            if (medicoInnerJoin == null)
-                return NotFound("Médico não encontrado para o identificador informado.");
-
-            MedicoResponseDTO medicoResponseDTO = new()
+            try
             {
-                Codigo = medicoInnerJoin.Id,
-                Nome = medicoInnerJoin.NomeCompleto,
-                Genero = medicoInnerJoin.Genero,
-                DataNascimento = medicoInnerJoin.DataNascimento,
-                CPF = medicoInnerJoin.CPF,
-                Telefone = medicoInnerJoin.Telefone,
-                InstituicaoEnsinoFormacao = medicoInnerJoin.InstituicaoEnsinoFormacao,
-                CrmUF = medicoInnerJoin.CrmUF,
-                EspecializacaoClinica = medicoInnerJoin.EspecializacaoClinica,
-                EstadoSistema = medicoInnerJoin.EstadoSistema,
-                Atendimentos = medicoInnerJoin.TotalAtendimentosRealizados
-            };
-
-            return Ok(medicoInnerJoin);
+                MedicoResponseDTO medicoResponseDTO = _medicoService.BuscaMedico(identificador);
+                return Ok(medicoResponseDTO);
+            }
+            catch (MyException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest($"Ocorreu um erro na requisição! Tente novamente mais tarde.");
+            }
         }
 
         [HttpDelete("/api/medicos/{identificador}")]
         public ActionResult Delete([FromRoute] int identificador)
         {
-            //Verificar se existe no banco de dados
-            var medicoModel = _atendimentoMedicoContext.Medico.Find(identificador);
-
-            if (medicoModel != null)
+            try
             {
-                _atendimentoMedicoContext.Medico.Remove(medicoModel);
-                _atendimentoMedicoContext.SaveChanges();
-
+                _medicoService.Remove(identificador);
                 return NoContent();
             }
-            else
-                return NotFound("Médico não encontrado com o identificador informado.");
+            catch (MyException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest($"Ocorreu um erro na requisição! Tente novamente mais tarde.");
+            }
         }
     }
 }

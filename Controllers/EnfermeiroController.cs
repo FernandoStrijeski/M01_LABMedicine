@@ -1,6 +1,8 @@
 using m01_labMedicine.DTO.Pessoa.Enfermeiro;
 using m01_labMedicine.DTO.Pessoa.Medico;
+using m01_labMedicine.Extension;
 using m01_labMedicine.Model;
+using m01_labMedicine.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace m01_labMedicine.Controllers
@@ -9,56 +11,26 @@ namespace m01_labMedicine.Controllers
     [Route("api/[controller]")]
     public class EnfermeiroController : ControllerBase
     {
-        private readonly LabMedicineContext _atendimentoMedicoContext;
+        private readonly IEnfermeiroService _enfermeiroService;
 
         //Construtor com parametro (Injetado)   
-        public EnfermeiroController(LabMedicineContext atendimentoMedicoContext) => _atendimentoMedicoContext = atendimentoMedicoContext;
-
+        public EnfermeiroController(IEnfermeiroService enfermeiroService) => _enfermeiroService = enfermeiroService;
+        
         [HttpPost("/api/enfermeiros/")]
         public ActionResult<EnfermeiroResponseDTO> Post([FromBody] EnfermeiroRequestDTO enfermeiroRequestDTO)
         {
             try
             {
-                EnfermeiroModel enfermeiroModel = new()
-                {
-                    NomeCompleto = enfermeiroRequestDTO.Nome,
-                    Genero = enfermeiroRequestDTO.Genero,
-                    DataNascimento = enfermeiroRequestDTO.DataNascimento,
-                    CPF = enfermeiroRequestDTO.CPF,
-                    Telefone = enfermeiroRequestDTO.Telefone,
-                    InstituicaoEnsinoFormacao = enfermeiroRequestDTO.InstituicaoEnsino,
-                    CofenUF = enfermeiroRequestDTO.CofenUF
-                };
-
-                //Verificar se existe o Enfermeiro no banco de dados
-                var EnfermeiroModelDb = _atendimentoMedicoContext.Enfermeiro.Where(x => x.CPF == enfermeiroRequestDTO.CPF).FirstOrDefault();
-                if (EnfermeiroModelDb != null)
-                    return Conflict($"Enfermeiro com o CPF informado já cadastrado [{EnfermeiroModelDb.NomeCompleto}]!");
-
-                //Add na lista do DBSet Enfermeiro
-                _atendimentoMedicoContext.Enfermeiro.Add(enfermeiroModel);
-
-                //Salvar no banco de dados
-                _atendimentoMedicoContext.SaveChanges();
-
-                EnfermeiroResponseDTO EnfermeiroResponseDTO = new()
-                {
-                    Codigo = enfermeiroModel.Id,
-                    Nome = enfermeiroModel.NomeCompleto,
-                    Genero = enfermeiroModel.Genero,
-                    DataNascimento = enfermeiroModel.DataNascimento,
-                    CPF = enfermeiroModel.CPF,
-                    Telefone = enfermeiroModel.Telefone,
-                    InstituicaoEnsino = enfermeiroRequestDTO.InstituicaoEnsino,
-                    CofenUF = enfermeiroRequestDTO.CofenUF
-                };
-
-                return Created("", EnfermeiroResponseDTO);
-
+                EnfermeiroResponseDTO enfermeiroResponseDTO = _enfermeiroService.Insere(enfermeiroRequestDTO);
+                return Created("", enfermeiroResponseDTO);
+            }
+            catch (MyException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.Message);
             }
             catch (Exception)
             {
-                return BadRequest("Dados inválidos!");
+                return BadRequest($"Ocorreu um erro na requisição! Tente novamente mais tarde.");
             }
         }
 
@@ -67,120 +39,73 @@ namespace m01_labMedicine.Controllers
         {
             try
             {
-                //Verificar se existe o Enfermeiro no banco de dados
-                var enfermeiroModel = _atendimentoMedicoContext.Enfermeiro.Where(x => x.Id == identificador).FirstOrDefault();
-
-                if (enfermeiroModel != null)
-                {
-                    enfermeiroModel.NomeCompleto = enfermeiroUpdateDTO.Nome;
-                    enfermeiroModel.Genero = enfermeiroUpdateDTO.Genero;
-                    enfermeiroModel.DataNascimento = enfermeiroUpdateDTO.DataNascimento;
-                    enfermeiroModel.Telefone = enfermeiroUpdateDTO.Telefone;
-                    enfermeiroModel.InstituicaoEnsinoFormacao = enfermeiroUpdateDTO.InstituicaoEnsino;
-                    enfermeiroModel.CofenUF = enfermeiroUpdateDTO.CofenUF;
-
-                    //Add na lista do DBSet Enfermeiro
-                    _atendimentoMedicoContext.Enfermeiro.Attach(enfermeiroModel);
-
-                    //Salvar no banco de dados
-                    _atendimentoMedicoContext.SaveChanges();
-
-                    EnfermeiroResponseDTO enfermeiroResponseDTO = new()
-                    {
-                        Codigo = enfermeiroModel.Id,
-                        Nome = enfermeiroModel.NomeCompleto,
-                        Genero = enfermeiroModel.Genero,
-                        DataNascimento = enfermeiroModel.DataNascimento,
-                        CPF = enfermeiroModel.CPF,
-                        Telefone = enfermeiroModel.Telefone,
-                        InstituicaoEnsino = enfermeiroModel.InstituicaoEnsinoFormacao,
-                        CofenUF = enfermeiroModel.CofenUF
-                    };
-
-                    return Ok(enfermeiroResponseDTO);
-                }
-                else
-                    return NotFound("Enfermeiro não encontrado com o identificador informado.");
-
+                EnfermeiroResponseDTO enfermeiroResponseDTO = _enfermeiroService.Atualiza(identificador, enfermeiroUpdateDTO);
+                return Ok(enfermeiroResponseDTO);
+            }
+            catch (MyException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.Message);
             }
             catch (Exception)
             {
-                return BadRequest("Dados inválidos!");
+                return BadRequest($"Ocorreu um erro na requisição! Tente novamente mais tarde.");
             }
         }
 
-        //Devolve todos os registros ou pelo status opcional
+        //Devolve todos os registros
         [HttpGet("/api/enfermeiros")]
         public ActionResult<List<EnfermeiroResponseDTO>> Get()
         {
-            List<EnfermeiroResponseDTO> lista = new();
-            IQueryable<EnfermeiroModel> enfermeirosInnerJoin;
-
-            enfermeirosInnerJoin = _atendimentoMedicoContext.Enfermeiro;
-
-            if (enfermeirosInnerJoin.Count() > 0)
+            try
             {
-                foreach (var enfermeiro in enfermeirosInnerJoin)
-                {
-                    EnfermeiroResponseDTO enfermeiroGet = new()
-                    {
-                        Codigo = enfermeiro.Id,
-                        Nome = enfermeiro.NomeCompleto,
-                        Genero = enfermeiro.Genero,
-                        DataNascimento = enfermeiro.DataNascimento,
-                        CPF = enfermeiro.CPF,
-                        Telefone = enfermeiro.Telefone,
-                        InstituicaoEnsino = enfermeiro.InstituicaoEnsinoFormacao,
-                        CofenUF = enfermeiro.CofenUF
-                    };
-
-                    lista.Add(enfermeiroGet);
-                }
-
-                return Ok(lista);
+                List<EnfermeiroResponseDTO> enfermeirosResponseDTO = _enfermeiroService.BuscaEnfermeiros();
+                return Ok(enfermeirosResponseDTO);
             }
-            else                
-                return NotFound("Nenhum enfermeiro cadastrado.");
+            catch (MyException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest($"Ocorreu um erro na requisição! Tente novamente mais tarde.");
+            }
         }
 
         //Devolve por id
         [HttpGet("/api/enfermeiros/{identificador}")]
         public ActionResult<EnfermeiroResponseDTO> GetPorId([FromRoute] int identificador)
         {
-            EnfermeiroModel enfermeiroInnerJoin = _atendimentoMedicoContext.Enfermeiro.Where(w => w.Id == identificador).FirstOrDefault();
-            if (enfermeiroInnerJoin == null)
-                return NotFound("Enfermeiro não encontrado para o identificador informado.");
-
-            EnfermeiroResponseDTO enfermeiroResponseDTO = new()
+            try
             {
-                Codigo = enfermeiroInnerJoin.Id,
-                Nome = enfermeiroInnerJoin.NomeCompleto,
-                Genero = enfermeiroInnerJoin.Genero,
-                DataNascimento = enfermeiroInnerJoin.DataNascimento,
-                CPF = enfermeiroInnerJoin.CPF,
-                Telefone = enfermeiroInnerJoin.Telefone,
-                InstituicaoEnsino = enfermeiroInnerJoin.InstituicaoEnsinoFormacao,
-                CofenUF = enfermeiroInnerJoin.CofenUF
-            };
-
-            return Ok(enfermeiroInnerJoin);
+                EnfermeiroResponseDTO enfermeiroResponseDTO = _enfermeiroService.BuscaEnfermeiro(identificador);
+                return Ok(enfermeiroResponseDTO);
+            }
+            catch (MyException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest($"Ocorreu um erro na requisição! Tente novamente mais tarde.");
+            }
         }
 
         [HttpDelete("/api/enfermeiros/{identificador}")]
         public ActionResult Delete([FromRoute] int identificador)
         {
-            //Verificar se existe no banco de dados
-            var enfermeiroModel = _atendimentoMedicoContext.Enfermeiro.Find(identificador);
-
-            if (enfermeiroModel != null)
+            try
             {
-                _atendimentoMedicoContext.Enfermeiro.Remove(enfermeiroModel);
-                _atendimentoMedicoContext.SaveChanges();
-
+                _enfermeiroService.Remove(identificador);
                 return NoContent();
             }
-            else
-                return NotFound("Enfermeiro não encontrado com o identificador informado.");
+            catch (MyException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest($"Ocorreu um erro na requisição! Tente novamente mais tarde.");
+            }
         }
     }
 }

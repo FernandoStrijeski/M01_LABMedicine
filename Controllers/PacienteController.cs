@@ -10,16 +10,11 @@ namespace m01_labMedicine.Controllers
     [Route("api/[controller]")]
     public class PacienteController : ControllerBase
     {
-        private readonly LabMedicineContext _atendimentoMedicoContext;
         private readonly IPacienteService _pacienteService;
 
         //Construtor com parametro (Injetado)   
-        public PacienteController(LabMedicineContext atendimentoMedicoContext, IPacienteService pacienteService)
-        {
-            _atendimentoMedicoContext = atendimentoMedicoContext;
-            _pacienteService = pacienteService;
-        }
-
+        public PacienteController(LabMedicineContext atendimentoMedicoContext, IPacienteService pacienteService) =>  _pacienteService = pacienteService;
+        
         [HttpPost("/api/pacientes/")]
         public ActionResult<PacienteResponseDTO> Post([FromBody] PacienteRequestDTO pacienteDTO)
         {
@@ -44,7 +39,7 @@ namespace m01_labMedicine.Controllers
             try 
             {
                 PacienteResponseDTO pacienteResponseDTO = _pacienteService.Atualiza(identificador, pacienteUpdateDTO);
-                return Created("", pacienteResponseDTO);
+                return Ok(pacienteResponseDTO);
             }
             catch (MyException ex)
             {
