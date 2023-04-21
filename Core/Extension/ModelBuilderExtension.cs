@@ -1,7 +1,7 @@
 ﻿using m01_labMedicine.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace m01_labMedicine.Extension
+namespace m01_labMedicine.Core.Extension
 {
     public static class ModelBuilderExtension
     {
@@ -23,7 +23,7 @@ namespace m01_labMedicine.Extension
             modelBuilder.Entity<MedicoModel>()
                 .HasData(new MedicoModel() { Id = 11, NomeCompleto = "Amanda Duarte", CPF = "27580525046", DataNascimento = DateTime.Parse("15/03/1966"), Genero = "Feminino", Telefone = "51991144444", InstituicaoEnsinoFormacao = "UFGRS", CrmUF = "1234567", EspecializacaoClinica = "Clínico Geral", EstadoSistema = "Ativo" },
                          new MedicoModel() { Id = 12, NomeCompleto = "Vitor Moraes", CPF = "61164709046", DataNascimento = DateTime.Parse("16/04/1977"), Genero = "Masculino", Telefone = "51987220022", InstituicaoEnsinoFormacao = "Ulbra", CrmUF = "2345678", EspecializacaoClinica = "Dermatologia", EstadoSistema = "Ativo" });
-            
+
             modelBuilder.Entity<EnfermeiroModel>()
                 .HasData(new EnfermeiroModel() { Id = 13, NomeCompleto = "Lucas Nascimento", CPF = "29949606055", DataNascimento = DateTime.Parse("17/05/1988"), Genero = "Masculino", Telefone = "51991232145", InstituicaoEnsinoFormacao = "PUCRS", CofenUF = "9876543" },
                          new EnfermeiroModel() { Id = 14, NomeCompleto = "Tatiana Lopes", CPF = "31533137099", DataNascimento = DateTime.Parse("18/06/1999"), Genero = "Feminino", Telefone = "51991234564", InstituicaoEnsinoFormacao = "UNISP", CofenUF = "8765432" });

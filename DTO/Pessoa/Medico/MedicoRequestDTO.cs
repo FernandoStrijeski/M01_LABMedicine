@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using static m01_labMedicine.Validation.CustomValidation;
+using static m01_labMedicine.Core.Validation.CustomValidation;
 
 namespace m01_labMedicine.DTO.Pessoa.Medico
 {

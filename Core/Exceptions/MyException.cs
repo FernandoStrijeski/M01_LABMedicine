@@ -1,5 +1,6 @@
 ﻿using System;
-namespace m01_labMedicine.Extension
+
+namespace m01_labMedicine.Core.Exceptions
 {
     class MyException : Exception
     {

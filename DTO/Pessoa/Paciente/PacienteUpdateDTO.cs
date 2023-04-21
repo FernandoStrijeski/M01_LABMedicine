@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using m01_labMedicine.DTO.Pessoa;
-using static m01_labMedicine.Validation.CustomValidation;
+using static m01_labMedicine.Core.Validation.CustomValidation;
 
 namespace m01_labMedicine.DTO.Pessoa.Paciente
 {

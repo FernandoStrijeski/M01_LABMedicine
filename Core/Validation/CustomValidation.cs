@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
-namespace m01_labMedicine.Validation
+namespace m01_labMedicine.Core.Validation
 {
     public partial class CustomValidation
     {
@@ -32,7 +32,7 @@ namespace m01_labMedicine.Validation
                 string[] myarr = AllowEspecializacoes.ToString().Split(',');
                 if (myarr.Contains(especializacoes))
                     return ValidationResult.Success;
-                
+
                 return new ValidationResult($"Por favor, informar uma especialização válida! Ex. [{AllowEspecializacoes}]");
             }
         }
@@ -45,18 +45,18 @@ namespace m01_labMedicine.Validation
                 string[] myarr = AllowSituacoes.ToString().Split(',');
                 if (myarr.Contains(especializacoes))
                     return ValidationResult.Success;
-                
+
                 return new ValidationResult($"Por favor, informar uma especialização válida! Ex. [{AllowSituacoes}]");
             }
         }
 
         public sealed class CheckCPF : ValidationAttribute
-        {            
+        {
             protected override ValidationResult IsValid(object cpf, ValidationContext validationContext)
-            {                
+            {
                 if (ValidarCPF(cpf.ToString()))
                     return ValidationResult.Success;
-                
+
                 return new ValidationResult("Por favor, informar um CPF válido, somente números!");
             }
             public static bool ValidarCPF(string cpf)
@@ -100,10 +100,10 @@ namespace m01_labMedicine.Validation
         {
             protected override ValidationResult IsValid(object telefone, ValidationContext validationContext)
             {
-                if (telefone == null || ValidarTelefone(telefone.ToString()))                
-                    return ValidationResult.Success;                
-                             
-                return new ValidationResult("Por favor, informar um telefone válido contendo DDD, somente números!");               
+                if (telefone == null || ValidarTelefone(telefone.ToString()))
+                    return ValidationResult.Success;
+
+                return new ValidationResult("Por favor, informar um telefone válido contendo DDD, somente números!");
             }
 
             public static bool ValidarTelefone(string telefone)
@@ -114,7 +114,7 @@ namespace m01_labMedicine.Validation
                 // Verifica se o telefone/celular possui 10 ou 11 dígitos (com DDD de 2 dígitos)
                 if (telefone.Length != 10 && telefone.Length != 11)
                     return false;
-                
+
                 // Telefone válido
                 return true;
             }

@@ -1,8 +1,8 @@
+using m01_labMedicine.Core.Exceptions;
 using m01_labMedicine.DTO.Pessoa.Enfermeiro;
 using m01_labMedicine.DTO.Pessoa.Medico;
-using m01_labMedicine.Extension;
 using m01_labMedicine.Model;
-using m01_labMedicine.Services;
+using m01_labMedicine.Services.Enfermeiro;
 using Microsoft.AspNetCore.Mvc;
 
 namespace m01_labMedicine.Controllers

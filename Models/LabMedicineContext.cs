@@ -1,6 +1,6 @@
 //using m01_labMedicine.Validation;
-using m01_labMedicine.Extension;
-using m01_labMedicine.Validation;
+using m01_labMedicine.Core.Extension;
+using m01_labMedicine.Core.Validation;
 using Microsoft.EntityFrameworkCore;
 
 namespace m01_labMedicine.Model

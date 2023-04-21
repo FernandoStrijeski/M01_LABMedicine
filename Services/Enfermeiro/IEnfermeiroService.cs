@@ -1,7 +1,7 @@
 ﻿using m01_labMedicine.DTO.Pessoa.Enfermeiro;
 using m01_labMedicine.DTO.Pessoa.Medico;
 
-namespace m01_labMedicine.Services
+namespace m01_labMedicine.Services.Enfermeiro
 {
     public interface IEnfermeiroService
     {

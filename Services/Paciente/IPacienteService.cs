@@ -1,6 +1,6 @@
 ﻿using m01_labMedicine.DTO.Pessoa.Paciente;
 
-namespace m01_labMedicine.Services
+namespace m01_labMedicine.Services.Paciente
 {
     public interface IPacienteService
     {

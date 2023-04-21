@@ -1,6 +1,6 @@
 ﻿using m01_labMedicine.DTO.Atendimento;
 
-namespace m01_labMedicine.Services
+namespace m01_labMedicine.Services.AtendimentoMedico
 {
     public interface IAtendimentoMedicoService
     {

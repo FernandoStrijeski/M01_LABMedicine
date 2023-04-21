@@ -1,6 +1,6 @@
 ﻿using m01_labMedicine.DTO.Pessoa.Medico;
 
-namespace m01_labMedicine.Services
+namespace m01_labMedicine.Services.Medico
 {
     public interface IMedicoService
     {

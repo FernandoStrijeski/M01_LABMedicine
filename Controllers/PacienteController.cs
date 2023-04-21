@@ -1,7 +1,7 @@
+using m01_labMedicine.Core.Exceptions;
 using m01_labMedicine.DTO.Pessoa.Paciente;
-using m01_labMedicine.Extension;
 using m01_labMedicine.Model;
-using m01_labMedicine.Services;
+using m01_labMedicine.Services.Paciente;
 using Microsoft.AspNetCore.Mvc;
 
 namespace m01_labMedicine.Controllers

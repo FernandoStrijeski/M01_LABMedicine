@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace m01_labMedicine.Validation
+namespace m01_labMedicine.Core.Validation
 {
     public class ListValueComparer : ValueComparer<List<string>>
     {
