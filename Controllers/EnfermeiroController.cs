@@ -1,8 +1,10 @@
 using m01_labMedicine.Core.Exceptions;
+using m01_labMedicine.DTO.Atendimento;
 using m01_labMedicine.DTO.Pessoa.Enfermeiro;
 using m01_labMedicine.DTO.Pessoa.Medico;
 using m01_labMedicine.Services.Enfermeiro;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
 
 namespace m01_labMedicine.Controllers
 {
@@ -14,8 +16,15 @@ namespace m01_labMedicine.Controllers
 
         //Construtor com parametro (Injetado)   
         public EnfermeiroController(IEnfermeiroService enfermeiroService) => _enfermeiroService = enfermeiroService;
-        
+
+        /// <summary>
+        /// Inclui um enfermeiro
+        /// </summary>
+        /// <response code="201">Criado com sucesso, retornando as informações do cadastro.</response>
+        /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
+        /// <response code="409">Enfermeiro já cadastrado.</response>
         [HttpPost("/api/enfermeiros/")]
+        [ProducesResponseType(typeof(EnfermeiroResponseDTO), StatusCodes.Status201Created)]
         public ActionResult<EnfermeiroResponseDTO> Post([FromBody] EnfermeiroRequestDTO enfermeiroRequestDTO)
         {
             try
@@ -33,7 +42,14 @@ namespace m01_labMedicine.Controllers
             }
         }
 
+        /// <summary>
+        /// Altera um enfermeiro
+        /// </summary>
+        /// <response code="200">Alterado com sucesso, retornando as informações do cadastro.</response>
+        /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
+        /// <response code="404">Enfermeiro não encontrado para o identificador informado.</response>
         [HttpPut("/api/enfermeiros/{identificador}")]
+        [ProducesResponseType(typeof(EnfermeiroResponseDTO), StatusCodes.Status200OK)]
         public ActionResult<EnfermeiroResponseDTO> Put([FromRoute] int identificador, EnfermeiroUpdateDTO enfermeiroUpdateDTO)
         {
             try
@@ -51,8 +67,14 @@ namespace m01_labMedicine.Controllers
             }
         }
 
-        //Devolve todos os registros
+        /// <summary>
+        /// Lista os enfermeiros
+        /// </summary>
+        /// <response code="200">Retorna a lista com as informações do cadastro.</response>
+        /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
+        /// <response code="404">Nenhum enfermeiro encontrado.</response>
         [HttpGet("/api/enfermeiros")]
+        [ProducesResponseType(typeof(List<EnfermeiroResponseDTO>), StatusCodes.Status200OK)]
         public ActionResult<List<EnfermeiroResponseDTO>> Get()
         {
             try
@@ -70,8 +92,14 @@ namespace m01_labMedicine.Controllers
             }
         }
 
-        //Devolve por id
+        /// <summary>
+        /// Busca um enfermeiro
+        /// </summary>
+        /// <response code="200">Retorna as informações do cadastro.</response>
+        /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
+        /// <response code="404">Enfermeiro não encontrado para o identificador fornecido.</response>
         [HttpGet("/api/enfermeiros/{identificador}")]
+        [ProducesResponseType(typeof(EnfermeiroResponseDTO), StatusCodes.Status200OK)]
         public ActionResult<EnfermeiroResponseDTO> GetPorId([FromRoute] int identificador)
         {
             try
@@ -89,6 +117,12 @@ namespace m01_labMedicine.Controllers
             }
         }
 
+        /// <summary>
+        /// Remove um enfermeiro
+        /// </summary>
+        /// <response code="204">Enfermeiro removido com sucesso.</response>
+        /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
+        /// <response code="404">Enfermeiro não encontrado para o identificador fornecido.</response>
         [HttpDelete("/api/enfermeiros/{identificador}")]
         public ActionResult Delete([FromRoute] int identificador)
         {

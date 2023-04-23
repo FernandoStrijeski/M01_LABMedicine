@@ -15,9 +15,15 @@ namespace m01_labMedicine.Controllers
 
         //Construtor com parametro (Injetado)   
         public MedicoController(IMedicoService medicoService) => _medicoService = medicoService;
-        
 
+        /// <summary>
+        /// Inclui um médico
+        /// </summary>
+        /// <response code="201">Criado com sucesso, retornando as informações do cadastro.</response>
+        /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
+        /// <response code="409">Médico já cadastrado.</response>
         [HttpPost("/api/medicos/")]
+        [ProducesResponseType(typeof(MedicoResponseDTO), StatusCodes.Status201Created)]
         public ActionResult<MedicoResponseDTO> Post([FromBody] MedicoRequestDTO medicoDTO)
         {
             try
@@ -35,7 +41,14 @@ namespace m01_labMedicine.Controllers
             }
         }
 
+        /// <summary>
+        /// Altera um médico
+        /// </summary>
+        /// <response code="200">Alterado com sucesso, retornando as informações do cadastro.</response>
+        /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
+        /// <response code="404">Médico não encontrado para o identificador informado.</response>
         [HttpPut("/api/medicos/{identificador}")]
+        [ProducesResponseType(typeof(MedicoResponseDTO), StatusCodes.Status200OK)]
         public ActionResult<MedicoResponseDTO> Put([FromRoute] int identificador, MedicoUpdateDTO medicoUpdateDTO)
         {
             try
@@ -53,8 +66,14 @@ namespace m01_labMedicine.Controllers
             }
         }
 
-        //Devolve todos os registros ou pelo status opcional
+        /// <summary>
+        /// Lista os médicos (status opcional)
+        /// </summary>
+        /// <response code="200">Retorna a lista com as informações do cadastro.</response>
+        /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
+        /// <response code="404">Nenhum médico encontrado.</response>
         [HttpGet("/api/medicos")]
+        [ProducesResponseType(typeof(List<MedicoResponseDTO>), StatusCodes.Status200OK)]
         public ActionResult<List<MedicoResponseDTO>> Get(string status = "")
         {
             try
@@ -72,8 +91,14 @@ namespace m01_labMedicine.Controllers
             }
         }
 
-        //Devolve por id
+        /// <summary>
+        /// Busca um médico
+        /// </summary>
+        /// <response code="200">Retorna as informações do cadastro.</response>
+        /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
+        /// <response code="404">Médico não encontrado para o identificador fornecido.</response>
         [HttpGet("/api/medicos/{identificador}")]
+        [ProducesResponseType(typeof(MedicoResponseDTO), StatusCodes.Status200OK)]
         public ActionResult<MedicoResponseDTO> GetPorId([FromRoute] int identificador)
         {
             try
@@ -91,6 +116,12 @@ namespace m01_labMedicine.Controllers
             }
         }
 
+        /// <summary>
+        /// Remove um médico
+        /// </summary>
+        /// <response code="204">Médico removido com sucesso.</response>
+        /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
+        /// <response code="404">Médico não encontrado para o identificador fornecido.</response>
         [HttpDelete("/api/medicos/{identificador}")]
         public ActionResult Delete([FromRoute] int identificador)
         {
