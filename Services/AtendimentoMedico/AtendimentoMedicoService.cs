@@ -51,7 +51,8 @@ namespace m01_labMedicine.Services.AtendimentoMedico
                 AtendimentoMedicoResponseDTO atendimentoResponseDTO = new()
                 {
                     Medico = _mapper.Map<MedicoResponseDTO>(medicoModel),
-                    Paciente = _mapper.Map<PacienteResponseDTO>(pacienteModel)
+                    Paciente = _mapper.Map<PacienteResponseDTO>(pacienteModel),
+                    DescricaoAtendimento = atendimentoMedicoModel.DescricaoAtendimento
                 };
 
                 return atendimentoResponseDTO;
