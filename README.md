@@ -175,6 +175,7 @@ No momento esta API ainda não possui métodos de autenticação, não necessita
 # 📸**Preview**
 <img src="https://user-images.githubusercontent.com/88670789/233817606-cbbce862-0013-46de-b3be-ab36c510464e.png">
 
+[![Watch the video](https://user-images.githubusercontent.com/88670789/233853883-af652a40-3233-499f-982b-bebdbe3114e3.png)](https://drive.google.com/file/d/19srk71iRFDpri6srAlw_ErJqcVr5pWIN/view)
 
 # 💻**Autor**
 
