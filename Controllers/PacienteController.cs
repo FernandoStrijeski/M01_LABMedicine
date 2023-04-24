@@ -22,7 +22,7 @@ namespace m01_labMedicine.Controllers
         /// <response code="201">Criado com sucesso, retornando as informações do cadastro.</response>
         /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
         /// <response code="409">Paciente já cadastrado.</response>
-        [HttpPost("/api/pacientes/")]
+        [HttpPost("/pacientes/")]
         [ProducesResponseType(typeof(PacienteResponseDTO), StatusCodes.Status201Created)]
         public ActionResult<PacienteResponseDTO> Post([FromBody] PacienteRequestDTO pacienteDTO)
         {
@@ -47,7 +47,7 @@ namespace m01_labMedicine.Controllers
         /// <response code="200">Alterado com sucesso, retornando as informações do cadastro.</response>
         /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
         /// <response code="404">Paciente não encontrado para o identificador informado.</response>
-        [HttpPut("/api/pacientes/{identificador}")]
+        [HttpPut("/pacientes/{identificador}")]
         [ProducesResponseType(typeof(PacienteResponseDTO), StatusCodes.Status200OK)]
         public ActionResult<PacienteResponseDTO> Put([FromRoute] int identificador, PacienteUpdateDTO pacienteUpdateDTO)
         {
@@ -72,7 +72,7 @@ namespace m01_labMedicine.Controllers
         /// <response code="204">Paciente removido com sucesso.</response>
         /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
         /// <response code="404">Paciente não encontrado para o identificador fornecido.</response>
-        [HttpDelete("/api/pacientes/{identificador}")]
+        [HttpDelete("/pacientes/{identificador}")]
         public ActionResult Delete([FromRoute] int identificador)
         {
             try
@@ -96,7 +96,7 @@ namespace m01_labMedicine.Controllers
         /// <response code="200">Retorna a lista com as informações do cadastro.</response>
         /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
         /// <response code="404">Nenhum paciente encontrado.</response>
-        [HttpGet("/api/pacientes")]
+        [HttpGet("/pacientes")]
         [ProducesResponseType(typeof(List<PacienteResponseDTO>), StatusCodes.Status200OK)]
         public ActionResult<List<PacienteResponseDTO>> Get([FromQuery] PacienteStatusRequestDTO status)
         {
@@ -121,7 +121,7 @@ namespace m01_labMedicine.Controllers
         /// <response code="200">Retorna as informações do cadastro.</response>
         /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
         /// <response code="404">Paciente não encontrado para o identificador fornecido.</response>
-        [HttpGet("/api/pacientes/{identificador}")]
+        [HttpGet("/pacientes/{identificador}")]
         [ProducesResponseType(typeof(PacienteResponseDTO), StatusCodes.Status200OK)]
         public ActionResult<PacienteResponseDTO> GetPorId([FromRoute] int identificador)
         {

@@ -21,7 +21,7 @@ namespace m01_labMedicine.Controllers
         /// <response code="201">Criado com sucesso, retornando as informações do médico, paciente e descrição do atendimento realizado.</response>
         /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
         /// <response code="404">Médico ou paciente não encontrados.</response>
-        [HttpPut("/api/atendimentos")]
+        [HttpPut("/atendimentos")]
         [ProducesResponseType(typeof(AtendimentoMedicoResponseDTO), StatusCodes.Status201Created)]
         public ActionResult<AtendimentoMedicoResponseDTO> Put([FromBody] AtendimentoMedicoRequestDTO atendimentoMeditoRequestDTO)
         {
@@ -46,7 +46,7 @@ namespace m01_labMedicine.Controllers
         /// <response code="200">Retorna uma lista contendo as informações dos médicos, pacientes e descrições dos atendimentos realizados.</response>
         /// <response code="400">Erro na requisição devido preenchimento incorreto dos campos esperados.</response>
         /// <response code="404">Nenhum histórico encontrado.</response>
-        [HttpGet("/api/atendimentos")]
+        [HttpGet("/atendimentos")]
         [ProducesResponseType(typeof(List<AtendimentoMedicoResponseDTO>), StatusCodes.Status200OK)]
         public ActionResult<List<AtendimentoMedicoResponseDTO>> Get([FromQuery] int medicoId = 0)
         {
