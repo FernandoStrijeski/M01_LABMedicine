@@ -46,7 +46,7 @@ namespace m01_labMedicine.Core.Validation
                 if (myarr.Contains(especializacoes))
                     return ValidationResult.Success;
 
-                return new ValidationResult($"Por favor, informar uma especialização válida! Ex. [{AllowSituacoes}]");
+                return new ValidationResult($"Por favor, informar uma situação válida! Ex. [{AllowSituacoes}]");
             }
         }
 

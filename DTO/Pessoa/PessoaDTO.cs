@@ -6,16 +6,16 @@ namespace m01_labMedicine.DTO.Pessoa
 {
     public abstract class PessoaDTO
     {
-        [Required]
+        [Required(ErrorMessage = "O Campo Nome é obrigatório")]
         [StringLength(maximumLength: 100)]
         public string Nome { get; set; }
 
         [StringLength(maximumLength: 30)]
         public string Genero { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O Campo Data de nascimento é obrigatório")]
+        [DataType(DataType.Date)]
         public DateTime DataNascimento { get; set; }
-        [Required]
         [CheckCPF]
         public string CPF { get; set; }
 
