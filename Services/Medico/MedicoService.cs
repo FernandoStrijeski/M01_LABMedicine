@@ -2,6 +2,7 @@
 using m01_labMedicine.Core.Exceptions;
 using m01_labMedicine.DTO.Pessoa.Medico;
 using m01_labMedicine.Model;
+using m01_labMedicine.Models.Enum;
 
 namespace m01_labMedicine.Services.Medico
 {
@@ -52,7 +53,7 @@ namespace m01_labMedicine.Services.Medico
 
                 if (medicoModel != null)
                 {
-                    if(medicoUpdateDTO.Nome != null)
+                    if (medicoUpdateDTO.Nome != null)
                         medicoModel.NomeCompleto = medicoUpdateDTO.Nome;
                     if (medicoUpdateDTO.Genero != null)
                         medicoModel.Genero = medicoUpdateDTO.Genero;
@@ -63,10 +64,10 @@ namespace m01_labMedicine.Services.Medico
                         medicoModel.InstituicaoEnsinoFormacao = medicoUpdateDTO.InstituicaoEnsino;
                     if (medicoUpdateDTO.Nome != null)
                         medicoModel.CrmUF = medicoUpdateDTO.CRMUF;
-                    if (medicoUpdateDTO.EspecializacaoClinica != null)
-                        medicoModel.EspecializacaoClinica = medicoUpdateDTO.EspecializacaoClinica;
+
+                    medicoModel.EspecializacaoClinica = medicoUpdateDTO.EspecializacaoClinica;
                     medicoModel.EstadoSistema = medicoUpdateDTO.SituacaoSistema;
-                    
+
                     medicoModel.TotalAtendimentosRealizados = medicoUpdateDTO.TotalAtendimentos;
 
                     //Add na lista do DBSet Medico
@@ -119,17 +120,18 @@ namespace m01_labMedicine.Services.Medico
             }
         }
 
-        public List<MedicoResponseDTO> BuscaMedicos(string status)
+        public List<MedicoResponseDTO> BuscaMedicos(SituacaoEnum? status)
         {
             try
             {
                 List<MedicoResponseDTO> lista = new();
                 IQueryable<MedicoModel> medicosInnerJoin;
 
-                if (status != "")
+                if (status != null)
                 {
-                    List<string> lstStatus = new(new string[] { "ATIVO", "INATIVO" });
-                    if (!lstStatus.Contains(status.ToUpper()))
+                    //List<string> lstStatus =  new(new string[] { "ATIVO", "INATIVO" });
+                    List<string> lstStatus = Enum.GetNames(typeof(SituacaoEnum)).ToList();
+                    if (!lstStatus.Contains(status.ToString().ToUpper()))
                         throw new MyException(404, "O status informado não existe.");
 
                     medicosInnerJoin = _labMedicineContext.Medico.Where(x => x.EstadoSistema == status);
@@ -139,14 +141,14 @@ namespace m01_labMedicine.Services.Medico
 
                 if (medicosInnerJoin.Any())
                 {
-                    foreach (var medico in medicosInnerJoin)                    
+                    foreach (var medico in medicosInnerJoin)
                         lista.Add(_mapper.Map<MedicoResponseDTO>(medico));
-                    
+
                     return lista;
                 }
                 else
                 {
-                    if (status != "")
+                    if (status != null)
                         throw new MyException(404, "Nenhum médico encontrado para o status informado.");
                     else
                         throw new MyException(404, "Nenhum médico cadastrado.");
@@ -168,7 +170,7 @@ namespace m01_labMedicine.Services.Medico
         {
             try
             {
-                MedicoModel medicoInnerJoin = _labMedicineContext.Medico.Where(w => w.Id == identificador).FirstOrDefault() ?? throw new MyException(404, "Médico não encontrado para o identificador informado.");                
+                MedicoModel medicoInnerJoin = _labMedicineContext.Medico.Where(w => w.Id == identificador).FirstOrDefault() ?? throw new MyException(404, "Médico não encontrado para o identificador informado.");
                 return _mapper.Map<MedicoResponseDTO>(medicoInnerJoin);
             }
             catch (MyException ex)

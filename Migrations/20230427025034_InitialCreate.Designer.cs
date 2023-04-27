@@ -12,7 +12,7 @@ using m01_labMedicine.Model;
 namespace m01_labMedicine.Migrations
 {
     [DbContext(typeof(LabMedicineContext))]
-    [Migration("20230420032334_InitialCreate")]
+    [Migration("20230427025034_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -73,9 +73,8 @@ namespace m01_labMedicine.Migrations
                     b.Property<DateTime>("DataNascimento")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Genero")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<int>("Genero")
+                        .HasColumnType("int");
 
                     b.Property<string>("InstituicaoEnsinoFormacao")
                         .IsRequired()
@@ -105,7 +104,7 @@ namespace m01_labMedicine.Migrations
                             CPF = "29949606055",
                             CofenUF = "9876543",
                             DataNascimento = new DateTime(1988, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Genero = "Masculino",
+                            Genero = 0,
                             InstituicaoEnsinoFormacao = "PUCRS",
                             NomeCompleto = "Lucas Nascimento",
                             Telefone = "51991232145"
@@ -116,7 +115,7 @@ namespace m01_labMedicine.Migrations
                             CPF = "31533137099",
                             CofenUF = "8765432",
                             DataNascimento = new DateTime(1999, 6, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Genero = "Feminino",
+                            Genero = 1,
                             InstituicaoEnsinoFormacao = "UNISP",
                             NomeCompleto = "Tatiana Lopes",
                             Telefone = "51991234564"
@@ -144,17 +143,14 @@ namespace m01_labMedicine.Migrations
                     b.Property<DateTime>("DataNascimento")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EspecializacaoClinica")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EspecializacaoClinica")
+                        .HasColumnType("int");
 
-                    b.Property<string>("EstadoSistema")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EstadoSistema")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Genero")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<int>("Genero")
+                        .HasColumnType("int");
 
                     b.Property<string>("InstituicaoEnsinoFormacao")
                         .IsRequired()
@@ -187,9 +183,9 @@ namespace m01_labMedicine.Migrations
                             CPF = "27580525046",
                             CrmUF = "1234567",
                             DataNascimento = new DateTime(1966, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EspecializacaoClinica = "Clínico Geral",
-                            EstadoSistema = "Ativo",
-                            Genero = "Feminino",
+                            EspecializacaoClinica = 0,
+                            EstadoSistema = 0,
+                            Genero = 1,
                             InstituicaoEnsinoFormacao = "UFGRS",
                             NomeCompleto = "Amanda Duarte",
                             Telefone = "51991144444",
@@ -201,9 +197,9 @@ namespace m01_labMedicine.Migrations
                             CPF = "61164709046",
                             CrmUF = "2345678",
                             DataNascimento = new DateTime(1977, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EspecializacaoClinica = "Dermatologia",
-                            EstadoSistema = "Ativo",
-                            Genero = "Masculino",
+                            EspecializacaoClinica = 2,
+                            EstadoSistema = 0,
+                            Genero = 0,
                             InstituicaoEnsinoFormacao = "Ulbra",
                             NomeCompleto = "Vitor Moraes",
                             Telefone = "51987220022",
@@ -242,18 +238,16 @@ namespace m01_labMedicine.Migrations
                     b.Property<DateTime>("DataNascimento")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Genero")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<int>("Genero")
+                        .HasColumnType("int");
 
                     b.Property<string>("NomeCompleto")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("StatusAtendimento")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("StatusAtendimento")
+                        .HasColumnType("int");
 
                     b.Property<string>("Telefone")
                         .HasMaxLength(11)
@@ -278,9 +272,9 @@ namespace m01_labMedicine.Migrations
                             ContatoEmergencia = "José",
                             CuidadosEspecificos = "",
                             DataNascimento = new DateTime(1981, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Genero = "Masculino",
+                            Genero = 0,
                             NomeCompleto = "Fernando Strijeski",
-                            StatusAtendimento = "AGUARDANDO_ATENDIMENTO",
+                            StatusAtendimento = 0,
                             Telefone = "51991234569",
                             TotalAtendimentos = 0
                         },
@@ -292,9 +286,9 @@ namespace m01_labMedicine.Migrations
                             ContatoEmergencia = "Adão",
                             CuidadosEspecificos = "",
                             DataNascimento = new DateTime(1982, 4, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Genero = "Masculino",
+                            Genero = 0,
                             NomeCompleto = "João Almeida",
-                            StatusAtendimento = "AGUARDANDO_ATENDIMENTO",
+                            StatusAtendimento = 0,
                             Telefone = "51991458547",
                             TotalAtendimentos = 0
                         },
@@ -306,9 +300,9 @@ namespace m01_labMedicine.Migrations
                             ContatoEmergencia = "Maria",
                             CuidadosEspecificos = "",
                             DataNascimento = new DateTime(1983, 5, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Genero = "Masculino",
+                            Genero = 0,
                             NomeCompleto = "Humberto de Assis",
-                            StatusAtendimento = "AGUARDANDO_ATENDIMENTO",
+                            StatusAtendimento = 0,
                             Telefone = "51998563256",
                             TotalAtendimentos = 0
                         },
@@ -320,9 +314,9 @@ namespace m01_labMedicine.Migrations
                             ContatoEmergencia = "Jacó",
                             CuidadosEspecificos = "",
                             DataNascimento = new DateTime(1984, 6, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Genero = "Feminino",
+                            Genero = 1,
                             NomeCompleto = "Júlia Rosa",
-                            StatusAtendimento = "AGUARDANDO_ATENDIMENTO",
+                            StatusAtendimento = 0,
                             Telefone = "51998856632",
                             TotalAtendimentos = 0
                         },
@@ -334,9 +328,9 @@ namespace m01_labMedicine.Migrations
                             ContatoEmergencia = "Pedro",
                             CuidadosEspecificos = "",
                             DataNascimento = new DateTime(1985, 7, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Genero = "Masculino",
+                            Genero = 2,
                             NomeCompleto = "Thiago Moreira",
-                            StatusAtendimento = "AGUARDANDO_ATENDIMENTO",
+                            StatusAtendimento = 0,
                             Telefone = "11994152365",
                             TotalAtendimentos = 0
                         },
@@ -348,9 +342,9 @@ namespace m01_labMedicine.Migrations
                             ContatoEmergencia = "Otávio",
                             CuidadosEspecificos = "",
                             DataNascimento = new DateTime(1986, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Genero = "Feminino",
+                            Genero = 1,
                             NomeCompleto = "Bárbara Motta",
-                            StatusAtendimento = "AGUARDANDO_ATENDIMENTO",
+                            StatusAtendimento = 0,
                             Telefone = "11984574125",
                             TotalAtendimentos = 0
                         },
@@ -362,9 +356,9 @@ namespace m01_labMedicine.Migrations
                             ContatoEmergencia = "Gisele",
                             CuidadosEspecificos = "",
                             DataNascimento = new DateTime(1987, 9, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Genero = "Feminino",
+                            Genero = 1,
                             NomeCompleto = "Luciana de Andrade",
-                            StatusAtendimento = "AGUARDANDO_ATENDIMENTO",
+                            StatusAtendimento = 0,
                             Telefone = "11996563696",
                             TotalAtendimentos = 0
                         },
@@ -376,9 +370,9 @@ namespace m01_labMedicine.Migrations
                             ContatoEmergencia = "Olavo",
                             CuidadosEspecificos = "",
                             DataNascimento = new DateTime(1988, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Genero = "Masculino",
+                            Genero = 0,
                             NomeCompleto = "Roberto Lima da Silva",
-                            StatusAtendimento = "AGUARDANDO_ATENDIMENTO",
+                            StatusAtendimento = 0,
                             Telefone = "54998878985",
                             TotalAtendimentos = 0
                         },
@@ -390,9 +384,9 @@ namespace m01_labMedicine.Migrations
                             ContatoEmergencia = "Bianca",
                             CuidadosEspecificos = "",
                             DataNascimento = new DateTime(1989, 11, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Genero = "Masculino",
+                            Genero = 0,
                             NomeCompleto = "Daniel Holanda",
-                            StatusAtendimento = "AGUARDANDO_ATENDIMENTO",
+                            StatusAtendimento = 0,
                             Telefone = "51991147484",
                             TotalAtendimentos = 0
                         },
@@ -404,9 +398,9 @@ namespace m01_labMedicine.Migrations
                             ContatoEmergencia = "Renan",
                             CuidadosEspecificos = "",
                             DataNascimento = new DateTime(1990, 12, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Genero = "Masculino",
+                            Genero = 4,
                             NomeCompleto = "Paulo Pedrozo",
-                            StatusAtendimento = "AGUARDANDO_ATENDIMENTO",
+                            StatusAtendimento = 0,
                             Telefone = "51996566996",
                             TotalAtendimentos = 0
                         });

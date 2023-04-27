@@ -1,55 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using m01_labMedicine.Models.Enum;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace m01_labMedicine.Core.Validation
 {
     public partial class CustomValidation
-    {
-        public sealed class CheckStatusAtendimento : ValidationAttribute
-        {
-            public string AllowStatus { get; set; }
-            public bool AllowStatusNull { get; set; }
-
-            protected override ValidationResult IsValid(object statusAtendimento, ValidationContext validationContext)
-            {
-                if (AllowStatusNull && (statusAtendimento == null || statusAtendimento.ToString() == ""))
-                    return ValidationResult.Success;
-
-                string[] myarr = AllowStatus.ToString().Split(',');
-                if (myarr.Contains(statusAtendimento))
-                    return ValidationResult.Success;
-
-                return new ValidationResult($"Por favor, informar um status válido! Ex. [{AllowStatus}]");
-            }
-        }
-
-        public sealed class CheckEspecializacaoClinica : ValidationAttribute
-        {
-            public string AllowEspecializacoes { get; set; }
-
-            protected override ValidationResult IsValid(object especializacoes, ValidationContext validationContext)
-            {
-                string[] myarr = AllowEspecializacoes.ToString().Split(',');
-                if (myarr.Contains(especializacoes))
-                    return ValidationResult.Success;
-
-                return new ValidationResult($"Por favor, informar uma especialização válida! Ex. [{AllowEspecializacoes}]");
-            }
-        }
-        public sealed class CheckSituacao : ValidationAttribute
-        {
-            public string AllowSituacoes { get; set; }
-
-            protected override ValidationResult IsValid(object especializacoes, ValidationContext validationContext)
-            {
-                string[] myarr = AllowSituacoes.ToString().Split(',');
-                if (myarr.Contains(especializacoes))
-                    return ValidationResult.Success;
-
-                return new ValidationResult($"Por favor, informar uma situação válida! Ex. [{AllowSituacoes}]");
-            }
-        }
-
+    {              
         public sealed class CheckCPF : ValidationAttribute
         {
             protected override ValidationResult IsValid(object cpf, ValidationContext validationContext)
@@ -118,6 +76,63 @@ namespace m01_labMedicine.Core.Validation
                 // Telefone válido
                 return true;
             }
+        }
+        
+        public sealed class StatusAtendimentoConverter : JsonConverter<StatusAtendimentoEnum>
+        {
+            public override StatusAtendimentoEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            {
+                string statusAtendimentoValidos = string.Join(",", Enum.GetNames(typeof(StatusAtendimentoEnum)));
+
+                var value = reader.GetString();
+                if (!Enum.TryParse<StatusAtendimentoEnum>(value, out var result)) 
+                    throw new JsonException($"Por favor, informe um valor válido para o Status de Atendimento: {statusAtendimentoValidos}");
+
+                return result;
+            }
+
+            public override void Write(Utf8JsonWriter writer, StatusAtendimentoEnum value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString());            
+        }
+
+        public sealed class SituacaoConverter : JsonConverter<SituacaoEnum>
+        {
+            public override SituacaoEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            {
+                var value = reader.GetString();
+                if (!Enum.TryParse<SituacaoEnum>(value, out var result))
+                    throw new JsonException($"Por favor, informe um valor válido para a Situação: {string.Join(",", Enum.GetNames(typeof(SituacaoEnum)))}");
+
+                return result;
+            }
+
+            public override void Write(Utf8JsonWriter writer, SituacaoEnum value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString());
+        }
+
+        public sealed class EspecializacaoClinicaConverter : JsonConverter<EspecializacaoClinicaEnum>
+        {
+            public override EspecializacaoClinicaEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            {                
+                var value = reader.GetString();
+                if (!Enum.TryParse<EspecializacaoClinicaEnum>(value, out var result))
+                    throw new JsonException($"Por favor, informe um valor válido para Especialização Clínica: {string.Join(",", Enum.GetNames(typeof(EspecializacaoClinicaEnum)))}");
+
+                return result;
+            }
+
+            public override void Write(Utf8JsonWriter writer, EspecializacaoClinicaEnum value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString());
+        }
+        public sealed class GeneroConverter : JsonConverter<GeneroEnum>
+        {
+            public override GeneroEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            {                
+                var value = reader.GetString();
+                if (!Enum.TryParse<GeneroEnum>(value, out var result))
+                    throw new JsonException($"Por favor, informe um valor válido para o Gênero: {string.Join(",", Enum.GetNames(typeof(GeneroEnum)))}");
+
+                return result;
+            }
+
+            public override void Write(Utf8JsonWriter writer, GeneroEnum value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString());
         }
     }
 }

@@ -2,6 +2,7 @@
 using m01_labMedicine.Core.Exceptions;
 using m01_labMedicine.DTO.Pessoa.Paciente;
 using m01_labMedicine.Model;
+using m01_labMedicine.Models.Enum;
 
 namespace m01_labMedicine.Services.Paciente
 {
@@ -51,10 +52,7 @@ namespace m01_labMedicine.Services.Paciente
                 var pacienteModel = _labMedicineContext.Paciente.Where(x => x.Id == identificador).FirstOrDefault() ?? throw new MyException(404, "Paciente não encontrado com o identificador informado.");
 
                 if (pacienteUpdateDTO.Nome != null)
-                    pacienteModel.NomeCompleto = pacienteUpdateDTO.Nome;
-                if (pacienteUpdateDTO.Genero != null)
-                    pacienteModel.Genero = pacienteUpdateDTO.Genero;
-                pacienteModel.DataNascimento = pacienteUpdateDTO.DataNascimento;
+                    pacienteModel.NomeCompleto = pacienteUpdateDTO.Nome;                
                 if (pacienteUpdateDTO.Telefone != null)
                     pacienteModel.Telefone = pacienteUpdateDTO.Telefone;
                 if (pacienteUpdateDTO.ContatoEmergencia != null)
@@ -66,6 +64,8 @@ namespace m01_labMedicine.Services.Paciente
                 if (pacienteUpdateDTO.Convenio != null)
                     pacienteModel.Convenio = pacienteUpdateDTO.Convenio;
 
+                pacienteModel.DataNascimento = pacienteUpdateDTO.DataNascimento;
+                pacienteModel.Genero = pacienteUpdateDTO.Genero;
                 pacienteModel.StatusAtendimento = pacienteUpdateDTO.StatusAtendimento;
 
                 //Add na lista do DBSet Paciente
@@ -117,7 +117,7 @@ namespace m01_labMedicine.Services.Paciente
         }
 
 
-        public List<PacienteResponseDTO> BuscaPacientes(PacienteStatusRequestDTO status)
+        public List<PacienteResponseDTO> BuscaPacientes(PacienteStatusRequestDTO? status)
         {
             try
             {
@@ -138,7 +138,7 @@ namespace m01_labMedicine.Services.Paciente
                 }
                 else
                 {
-                    if (status.StatusAtendimento != "")
+                    if (status.StatusAtendimento != null)
                         throw new MyException(404, "Nenhum paciente encontrado para o status informado.");
                     else
                         throw new MyException(404, "Nenhum paciente cadastrado.");

@@ -1,6 +1,7 @@
 using m01_labMedicine.Core.Exceptions;
 using m01_labMedicine.DTO.Pessoa.Medico;
 using m01_labMedicine.Model;
+using m01_labMedicine.Models.Enum;
 using m01_labMedicine.Services.Medico;
 using Microsoft.AspNetCore.Mvc;
 
@@ -74,7 +75,7 @@ namespace m01_labMedicine.Controllers
         /// <response code="404">Nenhum médico encontrado.</response>
         [HttpGet("/medicos")]
         [ProducesResponseType(typeof(List<MedicoResponseDTO>), StatusCodes.Status200OK)]
-        public ActionResult<List<MedicoResponseDTO>> Get(string status = "")
+        public ActionResult<List<MedicoResponseDTO>> Get(SituacaoEnum? status = null)
         {
             try
             {

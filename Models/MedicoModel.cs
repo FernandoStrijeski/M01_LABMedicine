@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using m01_labMedicine.Models.Enum;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
@@ -15,10 +16,10 @@ namespace m01_labMedicine.Model
         public string CrmUF { get; set; }
 
         [NotNull]
-        public string EspecializacaoClinica { get; set; }
+        public EspecializacaoClinicaEnum EspecializacaoClinica { get; set; }
 
         [NotNull]
-        public string EstadoSistema{ get; set; }
+        public SituacaoEnum EstadoSistema { get; set; }
 
         [NotNull]
         public int TotalAtendimentosRealizados { get; set; }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using m01_labMedicine.Models.Enum;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
@@ -15,8 +16,7 @@ namespace m01_labMedicine.Model
         [MaxLength(100)]
         public string NomeCompleto { get; set; }
 
-        [MaxLength(30)]
-        public string Genero { get; set; }
+        public GeneroEnum Genero { get; set; }
 
         [NotNull]
         public DateTime DataNascimento { get; set; }

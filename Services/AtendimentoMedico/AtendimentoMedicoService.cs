@@ -30,7 +30,7 @@ namespace m01_labMedicine.Services.AtendimentoMedico
                 _labMedicineContext.Medico.Attach(medicoModel);
 
                 pacienteModel.TotalAtendimentos += 1;
-                pacienteModel.StatusAtendimento = "Atendido";
+                pacienteModel.StatusAtendimento = Models.Enum.StatusAtendimentoEnum.ATENDIDO;
 
                 //Add na lista do DBSet Paciente
                 _labMedicineContext.Paciente.Attach(pacienteModel);

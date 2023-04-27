@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using m01_labMedicine.Models.Enum;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
@@ -21,7 +22,7 @@ namespace m01_labMedicine.Model
         public string Convenio{ get; set; }
 
         [NotNull]
-        public string StatusAtendimento { get; set; }
+        public StatusAtendimentoEnum StatusAtendimento { get; set; }
 
         public int TotalAtendimentos { get; set; }
     }
