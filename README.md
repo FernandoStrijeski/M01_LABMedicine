@@ -170,7 +170,7 @@ Para execução dessa aplicação é necessário criar a base de dados, conforme
 
 # ⚠️**Aviso**
 No momento esta API ainda não possui métodos de autenticação, não necessitando a utilização de tokens para acesso. 
-<br>Outro ponto a ser aprimorado é a utilização de enumeradores para os itens de status atendimento e situação (opcional).
+
 
 # 📸**Preview**
 <img src="https://user-images.githubusercontent.com/88670789/233817606-cbbce862-0013-46de-b3be-ab36c510464e.png">
